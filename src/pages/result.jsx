@@ -1,8 +1,11 @@
 import React from 'react'
+import AddFile from './result/addFile'
 
 function Result() {
   return (
-    <div>Result</div>
+    
+    <AddFile/>
+   
   )
 }
 
