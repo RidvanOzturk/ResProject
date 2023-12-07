@@ -3,7 +3,6 @@ import { FaFileExcel } from "react-icons/fa";
 
 
 function AddFile() {
-  
   return (
     <form>
       <div className="space-y-12">
