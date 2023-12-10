@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 function App() {
   // React States
@@ -8,11 +9,11 @@ function App() {
   // User Login info
   const database = [
     {
-      username: "user1",
+      username: "user1"+"@uskudar.edu.tr",
       password: "pass1"
     },
     {
-      username: "user2",
+      username: "user2"+"@st.uskudar.edu.tr",
       password: "pass2"
     }
   ];
@@ -76,7 +77,7 @@ function App() {
     <div className="app">
       <div className="login-form">
         <div className="title">Sign In</div>
-        {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+        {isSubmitted ? <div><Navigate replace to="/result" /></div> : renderForm}
       </div>
     </div>
   );
