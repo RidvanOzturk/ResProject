@@ -1,8 +1,11 @@
-import React from 'react'
+import React,{ useState } from 'react'
 import { FaFileExcel } from "react-icons/fa";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 
 function AddFile() {
+  const [startDate, setStartDate] = useState(new Date());
   return (
     <form>
       <div className="space-y-12">
@@ -27,7 +30,6 @@ function AddFile() {
                 </div>
               </div>
             </div>
-
             <div className="col-span-full">
               <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
                 Açıklama
@@ -72,15 +74,16 @@ function AddFile() {
           Çoklu
           </label>
       </div>
+      <div></div>
             <div className="col-span-full">
             
               <div className="mt-2 flex items-center gap-x-3">
-                <button
-                  type="button"
-                  className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                >
-                  Excel Ekle
-                </button>
+              <DatePicker showIcon selected={startDate} onChange={(date) => setStartDate(date)} />
+              <DatePicker
+      showIcon
+      selected={startDate}
+      onChange={(date) => setStartDate(date)}
+    />
               </div>
             </div>
 
