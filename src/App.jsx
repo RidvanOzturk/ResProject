@@ -19,6 +19,7 @@ import Layout from './components/Layout';
 
 import Footer from './components/Footer';
 import List from './pages/result/list';
+import Multiple from './pages/selection/multiple';
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/result" element={<Result />} />
             <Route path='/list' element={<List />} />
+            <Route path='/multiple' element={<Multiple />} />
           </Routes>
         </Layout>
 
