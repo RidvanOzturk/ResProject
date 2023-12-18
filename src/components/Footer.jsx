@@ -12,11 +12,7 @@ const Footer = () => {
         href="https://tailwind-elements.com/"
       >TW Elements</a>
     </div>*/
-    <footer>
-        <Link to="/login" className="">Login</Link>
-         &nbsp;
-        <Link to="/result" className="">Result</Link>
-    </footer>
+    <></>
   )
 }
 
