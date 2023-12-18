@@ -1,12 +1,42 @@
-import React from 'react'
+import React,{ useState, useEffect } from 'react'
+
+import { storage, firestore } from '../../firebase';
+import { doc, getDoc } from "firebase/firestore";
+
 import * as XLSX from "xlsx";
 
 const Multiple = () => {
 
+  const [data, setData] = useState(null);
 
-  const handleFileUpload = (e) => {
+  useEffect(() => {
+   
+    const fetchData = async () => {
+        
+      const docRef = doc(firestore, "files", "OMVoPNI0rK9glJjkn3Jb");
+      const docSnap = await getDoc(docRef);
+        
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        
+        handleFileUpload(docSnap.data().url)
+      } else {
+        // docSnap.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    }
+    
+    fetchData().catch(console.error);;
+
+  }, []);
+
+
+  const handleFileUpload = (url) => {
+
+    const e = URLtoFile(url);
+
     const reader = new FileReader();
-    reader.readAsBinaryString(e.target.files[0]);
+    reader.readAsBinaryString(e);
     reader.onload = (e) => {
       const data = e.target.result;
       const workbook = XLSX.read(data, { type: "binary" });
@@ -16,6 +46,30 @@ const Multiple = () => {
       setData(parsedData);
     };
   }
+
+  const URLtoFile = async url => {
+
+    const res = await fetch(url);
+    const blob = await res.blob();
+    // Gets URL data and read to blob
+  
+    console.log(blob);
+  
+    const mime = blob.type;
+    const ext = mime.slice(mime.lastIndexOf("/") + 1, mime.length);
+    // Gets blob MIME type (e.g. image/png) and extracts extension
+        
+    const file = new File([blob], `filename.${ext}`, {
+        type: mime,
+    })
+    // Creates new File object using blob data, extension and MIME type
+  
+    console.log(file);
+
+    return file;
+
+  }
+  
 
 
   return (

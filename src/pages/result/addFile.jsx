@@ -29,7 +29,7 @@ function AddFile() {
   const handleOptionChange = e => { setIsSingle(e.target.value === "single" ? true : false); }
   const handleStartDateChange = date => { setStartDate(date); }
   const handleEndDateChange = date => { setEndDate(date); }
-  const handleFileChange = e => { setFile(e.target.files[0]); }
+  const handleFileChange = e => { setFile(e.target.files[0]); console.log(e.target.files[0])}
 
   const handleFormSubmit = () => {
 
