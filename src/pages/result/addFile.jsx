@@ -1,7 +1,6 @@
 import React,{ useState } from 'react'
-import { FaFileExcel } from "react-icons/fa";
 import DatePicker from "react-datepicker";
-
+import Swal from 'sweetalert2'
 import { storage, firestore } from '../../firebase';
 import { getDownloadURL, uploadBytesResumable, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection, getDocs, serverTimestamp } from "firebase/firestore";
@@ -33,7 +32,15 @@ function AddFile() {
 
   const handleFormSubmit = () => {
 
-    if (title === null || file === null) return;
+    if (title === null || file === null) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Lütfen tüm boşlukları doldurunuz.",
+        footer: 'Alanları eksiksiz doldurunuz.'
+      });
+      return;
+    }
 
     setUploadIsStarted(true);
 

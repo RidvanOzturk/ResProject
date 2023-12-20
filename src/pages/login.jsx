@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 
-function App() {
+function Login() {
   // React States
   const [errorMessages, setErrorMessages] = useState({});
+  const [token, setToken] = useState()
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // User Login info
@@ -83,4 +84,4 @@ function App() {
   );
 }
 
-export default App;
+export default Login;
