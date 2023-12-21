@@ -3,6 +3,8 @@ import React,{ useState, useEffect } from 'react'
 import { storage, firestore } from '../../firebase';
 import { doc, getDoc } from "firebase/firestore";
 
+import { ref, getDownloadURL } from "firebase/storage";
+
 import * as XLSX from "xlsx";
 
 const Multiple = () => {
@@ -13,27 +15,36 @@ const Multiple = () => {
    
     const fetchData = async () => {
         
-      const docRef = doc(firestore, "files", "OMVoPNI0rK9glJjkn3Jb");
-      const docSnap = await getDoc(docRef);
-        
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        
-        handleFileUpload(docSnap.data().url)
-      } else {
-        // docSnap.data() will be undefined in this case
-        console.log("No such document!");
-      }
+      getDownloadURL(ref(storage, 'files/ISNET Katman ÇAĞRI AĞACI.xlsx'))
+        .then((url) => {
+            // `url` is the download URL for 'images/stars.jpg'
+
+            // This can be downloaded directly:
+            const xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+            xhr.onload = (event) => {
+            const blob = xhr.response;
+            };
+            xhr.open('GET', url);
+            xhr.send();
+
+            handleFileUpload(url)
+            console.log(url)
+        })
+        .catch((error) => {
+            // Handle any errors
+        });
     }
     
     fetchData().catch(console.error);;
 
+
   }, []);
 
 
-  const handleFileUpload = (url) => {
+  const handleFileUpload = async (url) => {
 
-    const e = URLtoFile(url);
+    const e = await URLtoFile(url);
 
     const reader = new FileReader();
     reader.readAsBinaryString(e);
@@ -44,6 +55,7 @@ const Multiple = () => {
       const sheet = workbook.Sheets[sheetName];
       const parsedData = XLSX.utils.sheet_to_json(sheet);
       setData(parsedData);
+      console.log(parsedData)
     };
   }
 
