@@ -15,7 +15,7 @@ const Multiple = () => {
    
     const fetchData = async () => {
         
-      getDownloadURL(ref(storage, 'files/ISNET Katman ÇAĞRI AĞACI.xlsx'))
+      getDownloadURL(ref(storage, 'files/Sonuç.xlsx'))
         .then((url) => {
             // `url` is the download URL for 'images/stars.jpg'
 
@@ -54,8 +54,11 @@ const Multiple = () => {
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const parsedData = XLSX.utils.sheet_to_json(sheet);
+      
       setData(parsedData);
+      console.log(Object.keys(parsedData))
       console.log(parsedData)
+
     };
   }
 
@@ -64,6 +67,8 @@ const Multiple = () => {
     const res = await fetch(url);
     const blob = await res.blob();
     // Gets URL data and read to blob
+  
+    console.log(url);
   
     console.log(blob);
   
@@ -85,7 +90,60 @@ const Multiple = () => {
 
 
   return (
-      <div className="relative overflow-x-auto">
+    <div className="relative overflow-x-auto">
+        {
+        /*
+            Teklide
+
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            data && Object.keys(data).map((key, index) => (
+                <tr key={index}>
+                    <td>{key}</td>
+                    <td>{data[key]}</td>
+                </tr>
+                ))
+        </table>
+        */
+        }
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" className="px-6 py-3">
+                    Ad
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    Soyad
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    Sonuç
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {
+                data && data.map(row => 
+
+                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            { row['Ad'] }
+                        </th>
+                        <td className="px-6 py-4">
+                            {  row['Soyad'] }
+                        </td>
+                        <td className="px-6 py-4">
+                            { row['Sonuç'] }
+                        </td>
+                    </tr>
+                )
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+     /* <div className="relative overflow-x-auto">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -148,7 +206,7 @@ const Multiple = () => {
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div>*/
 
   )
 }

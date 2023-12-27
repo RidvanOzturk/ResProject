@@ -77,6 +77,7 @@ function AddFile() {
             .then(async (downloadURL) => {
                 try {
                     const docRef = await addDoc(collectionRef, {
+                      owner: 'ozturkridvan1@gmail.com',
                       url: downloadURL,
                       title, description, isSingle, startDate, endDate,
                       createdAt: serverTimestamp()
