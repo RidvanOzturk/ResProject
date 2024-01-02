@@ -1,6 +1,15 @@
 import { useState } from 'react'
 import './App.css'
 
+
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+import store from "./redux/app/store";
+
+import GuestGuard from "./guards/GuestGuard";
+import AuthGuard from "./guards/AuthGuard";
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,6 +19,7 @@ import {
   useParams,
   BrowserRouter
 } from 'react-router-dom';
+
 
 import Header from './components/Header';
 import Layout from './components/Layout';
@@ -22,25 +32,30 @@ import List from './pages/result/list';
 import Multiple from './pages/selection/multiple';
 
 function App() {
+  
+  const persistor = persistStore(store);
 
   return (
-    <Router>
+    <Provider store={store}>
+        <PersistGate persistor={persistor}>
 
-        <Header/>
+          <Router>
+              <Header/>
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<AuthGuard><Result /></AuthGuard>} />
+                  <Route path="/login" element={<GuestGuard><Login /></GuestGuard>} />
+                  <Route path="/result" element={<AuthGuard><Result /></AuthGuard>} />
+                  <Route path='/list' element={<AuthGuard><List /></AuthGuard>} />
+                  <Route path='/multiple' element={<AuthGuard><Multiple /></AuthGuard>} />
+                </Routes>
+              </Layout>
 
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/result" element={<Result />} />
-            <Route path='/list' element={<List />} />
-            <Route path='/multiple' element={<Multiple />} />
-          </Routes>
-        </Layout>
-
-        <Footer/>
-
-    </Router>
+              <Footer/>
+          </Router>
+    
+      </PersistGate>
+    </Provider>
   )
 }
 

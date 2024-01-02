@@ -1,84 +1,44 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+
+import useAuthentication from "../hooks/useAuthentication";
+
+import { NavLink, useNavigate } from "react-router-dom";
 
 function Login() {
-  // React States
-  const [errorMessages, setErrorMessages] = useState({});
-  const [token, setToken] = useState()
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  const navigate = useNavigate();
 
-  // User Login info
-  const database = [
-    {
-      username: "user1"+"@uskudar.edu.tr",
-      password: "pass1"
-    },
-    {
-      username: "user2"+"@st.uskudar.edu.tr",
-      password: "pass2"
-    }
-  ];
+  const {isLoading, message, loginCall} = useAuthentication();
 
-  const errors = {
-    uname: "invalid username",
-    pass: "invalid password"
-  };
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
-    //Prevent page reload
+  const handleSubmit = async event => {
     event.preventDefault();
-
-    var { uname, pass } = document.forms[0];
-
-    // Find user login info
-    const userData = database.find((user) => user.username === uname.value);
-
-    // Compare user info
-    if (userData) {
-      if (userData.password !== pass.value) {
-        // Invalid password
-        setErrorMessages({ name: "pass", message: errors.pass });
-      } else {
-        setIsSubmitted(true);
-      }
-    } else {
-      // Username not found
-      setErrorMessages({ name: "uname", message: errors.uname });
-    }
+    
+    await loginCall({username, password})
   };
-
-  // Generate JSX code for error message
-  const renderErrorMessage = (name) =>
-    name === errorMessages.name && (
-      <div className="error">{errorMessages.message}</div>
-    );
-
-  // JSX code for login form
-  const renderForm = (
-    <div className="form">
-      <form onSubmit={handleSubmit}>
-        <div className="input-container">
-          <label>Username </label>
-          <input type="text" name="uname" required />
-          {renderErrorMessage("uname")}
-        </div>
-        <div className="input-container">
-          <label>Password </label>
-          <input type="password" name="pass" required />
-          {renderErrorMessage("pass")}
-        </div>
-        <div className="button-container">
-          <input type="submit" value="Enter" />
-        </div>
-      </form>
-    </div>
-  );
+    
 
   return (
     <div className="app">
       <div className="login-form">
         <div className="title">Sign In</div>
-        {isSubmitted ? <div><Navigate replace to="/result" /></div> : renderForm}
+        <div className="form">
+          <form onSubmit={handleSubmit}>
+            <div className="input-container">
+              <label>Username </label>
+              <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+            </div>
+            <div className="input-container">
+              <label>Password </label>
+              <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            </div>
+            <div className="button-container">
+              <input type="submit" value="Enter" />
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

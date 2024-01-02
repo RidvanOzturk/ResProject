@@ -1,5 +1,7 @@
 import React,{ useState, useEffect } from 'react'
 
+import {useSelector} from "react-redux";
+
 import { storage, firestore } from '../../firebase';
 import { doc, getDoc } from "firebase/firestore";
 
@@ -9,34 +11,26 @@ import * as XLSX from "xlsx";
 
 const Multiple = () => {
 
+  const user = useSelector(({UserSlice}) => UserSlice.user);
+
   const [data, setData] = useState(null);
 
   useEffect(() => {
    
     const fetchData = async () => {
         
-      getDownloadURL(ref(storage, 'files/Sonuç.xlsx'))
+      getDownloadURL(ref(storage, `files/${target.files[0]}`))
         .then((url) => {
-            // `url` is the download URL for 'images/stars.jpg'
-
-            // This can be downloaded directly:
-            const xhr = new XMLHttpRequest();
-            xhr.responseType = 'blob';
-            xhr.onload = (event) => {
-            const blob = xhr.response;
-            };
-            xhr.open('GET', url);
-            xhr.send();
 
             handleFileUpload(url)
             console.log(url)
         })
         .catch((error) => {
-            // Handle any errors
+            console.log(error);
         });
     }
     
-    fetchData().catch(console.error);;
+    fetchData();
 
 
   }, []);

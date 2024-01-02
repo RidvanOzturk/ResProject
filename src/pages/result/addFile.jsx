@@ -1,4 +1,7 @@
 import React,{ useState } from 'react'
+
+import {useSelector} from "react-redux";
+
 import DatePicker from "react-datepicker";
 import Swal from 'sweetalert2'
 import { storage, firestore } from '../../firebase';
@@ -9,6 +12,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 
 function AddFile() {
+
+  const user = useSelector(({UserSlice}) => UserSlice.user);
 
   const [uploadIsStarted, setUploadIsStarted] = useState(false);
 
@@ -28,7 +33,8 @@ function AddFile() {
   const handleOptionChange = e => { setIsSingle(e.target.value === "single" ? true : false); }
   const handleStartDateChange = date => { setStartDate(date); }
   const handleEndDateChange = date => { setEndDate(date); }
-  const handleFileChange = e => { setFile(e.target.files[0]); console.log(e.target.files[0])}
+  const handleFileChange = e => { setFile(e.target.files[0]); }
+
 
   const handleFormSubmit = () => {
 
@@ -77,7 +83,7 @@ function AddFile() {
             .then(async (downloadURL) => {
                 try {
                     const docRef = await addDoc(collectionRef, {
-                      owner: 'ozturkridvan1@gmail.com',
+                      owner: user.username,
                       url: downloadURL,
                       title, description, isSingle, startDate, endDate,
                       createdAt: serverTimestamp()
@@ -174,8 +180,8 @@ function AddFile() {
 
             <div className="col-span-full">
               <div className="mt-2 flex items-center gap-x-3">
-                <DatePicker showIcon selected={startDate} onChange={(date) => handleStartDateChange(date)} />
-                <DatePicker showIcon selected={endDate} onChange={(date) => handleEndDateChange(date)} />
+                <DatePicker showIcon selected={startDate} dateFormat="dd/MM/yyyy" onChange={(date) => handleStartDateChange(date)} />
+                <DatePicker showIcon selected={endDate} dateFormat="dd/MM/yyyy" onChange={(date) => handleEndDateChange(date)} />
               </div>
             </div>
 
