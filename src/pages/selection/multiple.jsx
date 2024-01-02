@@ -19,7 +19,7 @@ const Multiple = () => {
    
     const fetchData = async () => {
         
-      getDownloadURL(ref(storage, `files/${target.files[0]}`))
+      getDownloadURL(ref(storage, 'files/Sonuç.xlsx'))
         .then((url) => {
 
             handleFileUpload(url)
