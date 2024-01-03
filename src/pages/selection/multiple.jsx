@@ -3,7 +3,7 @@ import React,{ useState, useEffect } from 'react'
 import {useSelector} from "react-redux";
 
 import { storage, firestore } from '../../firebase';
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection  } from "firebase/firestore";
 
 import { ref, getDownloadURL } from "firebase/storage";
 
@@ -16,10 +16,10 @@ const Multiple = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-   
+   /*
     const fetchData = async () => {
         
-      getDownloadURL(ref(storage, 'files/Sonuç.xlsx'))
+      getDownloadURL(ref(storage, 'files/Sonuç3.xlsx'))
         .then((url) => {
 
             handleFileUpload(url)
@@ -30,7 +30,24 @@ const Multiple = () => {
         });
     }
     
-    fetchData();
+    fetchData();*/
+
+    const fetchDocs = async () => {
+
+        const querySnapshot = await getDocs(collection(firestore, "files"));
+    
+        console.log(querySnapshot.docs[0].data())
+        handleFileUpload(querySnapshot.docs[0].data().url)
+
+        /*querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data());
+
+            
+            handleFileUpload(doc.data().url)
+          });*/
+    }
+
+    fetchDocs();
 
 
   }, []);
@@ -48,8 +65,15 @@ const Multiple = () => {
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const parsedData = XLSX.utils.sheet_to_json(sheet);
+
+      console.log(parsedData)
+      let filteredData = parsedData.filter((number) => {
+        return number["Öğrenci No"] == user.username;
+      });
+      console.log(filteredData)
       
-      setData(parsedData);
+      setData(filteredData);
+      
       console.log(Object.keys(parsedData))
       console.log(parsedData)
 

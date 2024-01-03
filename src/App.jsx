@@ -7,6 +7,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import store from "./redux/app/store";
 
+import AdminGuard from './guards/AdminGuard';
 import GuestGuard from "./guards/GuestGuard";
 import AuthGuard from "./guards/AuthGuard";
 
@@ -24,7 +25,8 @@ import {
 import Header from './components/Header';
 import Layout from './components/Layout';
 
-  import Login from "./pages/login"
+  import UserLogin from "./pages/login/UserLogin"
+  import AdminLogin from "./pages/login/AdminLogin"
   import Result from "./pages/result"
 
 import Footer from './components/Footer';
@@ -43,9 +45,10 @@ function App() {
               <Header/>
               <Layout>
                 <Routes>
-                  <Route path="/" element={<AuthGuard><Result /></AuthGuard>} />
-                  <Route path="/login" element={<GuestGuard><Login /></GuestGuard>} />
-                  <Route path="/result" element={<AuthGuard><Result /></AuthGuard>} />
+                  <Route path="/" element={<GuestGuard><UserLogin /></GuestGuard>} />
+                  <Route path="/login" element={<GuestGuard><UserLogin /></GuestGuard>} />
+                  <Route path="/panel-login" element={<GuestGuard><AdminLogin /></GuestGuard>} />
+                  <Route path="/result" element={<AdminGuard><Result /></AdminGuard>} />
                   <Route path='/list' element={<AuthGuard><List /></AuthGuard>} />
                   <Route path='/multiple' element={<AuthGuard><Multiple /></AuthGuard>} />
                 </Routes>

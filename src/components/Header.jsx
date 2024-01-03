@@ -1,6 +1,3 @@
-import { Link } from "react-router-dom";
-import logo from "../assets/uskudar-100-yil.jpg"
-
 import {useSelector} from "react-redux";
 import useAuthentication from "../hooks/useAuthentication";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -59,9 +56,9 @@ const Header = () => {
                                 {welcomeText()}
                             </span>
                             &nbsp;
-                            <span className="dark:text-white font-bold">
-                                {user.username}
-                            </span>
+                            { 
+                                user.role == "admin" && <span className="dark:text-white font-bold">{user.username}</span>
+                            }
                         </div>
                         <div className="flex items-center lg:order-2 ">
                             <button type="button"

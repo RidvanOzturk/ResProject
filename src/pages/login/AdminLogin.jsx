@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
-import useAuthentication from "../hooks/useAuthentication";
+import useAuthentication from "../../hooks/useAuthentication";
 
 import { NavLink, useNavigate } from "react-router-dom";
 
-function Login() {
+function AdminLogin() {
   
   const navigate = useNavigate();
 
-  const {isLoading, message, loginCall} = useAuthentication();
+  const {isLoading, message, adminLoginCall} = useAuthentication();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,14 +16,14 @@ function Login() {
   const handleSubmit = async event => {
     event.preventDefault();
     
-    await loginCall({username, password})
+    await adminLoginCall({username, password})
   };
     
 
   return (
     <div className="app">
       <div className="login-form">
-        <div className="title">Sign In</div>
+        <div className="title">Admin Log In</div>
         <div className="form">
           <form onSubmit={handleSubmit}>
             <div className="input-container">
@@ -44,4 +44,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default AdminLogin;

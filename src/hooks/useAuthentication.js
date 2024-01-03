@@ -10,7 +10,7 @@ const useAuthentication = () => {
     const [message, setMessage] = useState(null);
 
 
-    const loginCall = async({username, password}) => {
+    const userLoginCall = async({username, password}) => {
 
         setIsLoading(true)
 
@@ -31,7 +31,55 @@ const useAuthentication = () => {
 
             console.log("Axios Post!");
 
-            const userData = {username, password};
+            const userData = {
+                username,
+                password,
+                "role": "user"
+            };
+              
+            dispatch(setUser(userData));
+
+        }
+        catch(e) {
+
+            console.log(err);
+
+            setMessage({
+                content: "Incorrect mail or password, please try again!",
+                isError: true
+            });
+        }
+        finally {
+
+            setIsLoading(false);
+        }
+    }
+    const adminLoginCall = async({username, password}) => {
+
+        setIsLoading(true)
+
+        try {
+
+            /*
+            const response = await axios.post(
+                "api_connection_url",
+                {
+                    username, password
+                },
+                {   
+                  headers: { "Content-Type": "application/json" },
+                  withCredentials: true,
+                }
+              );
+            */
+
+            console.log("Axios Post!");
+
+            const userData = {
+                username,
+                password,
+                "role": "admin"
+            };
               
             dispatch(setUser(userData));
 
@@ -77,7 +125,7 @@ const useAuthentication = () => {
         }
     };
     
-    return {isLoading, message, loginCall, logoutCall};
+    return {isLoading, message, userLoginCall, adminLoginCall, logoutCall};
 }
 
 export default useAuthentication
