@@ -1,6 +1,7 @@
 import {useSelector} from "react-redux";
 import useAuthentication from "../hooks/useAuthentication";
 import { NavLink, useNavigate } from "react-router-dom";
+import { RoleTypes } from "../RoleTypes";
 
 const Header = () => {
 
@@ -33,7 +34,7 @@ const Header = () => {
 
   return (
     
-     <nav className="bg-white border-white px-4 lg:px-6 py-2.5 dark:bg-green-500">
+     <nav className="bg-white border-white px-4 lg:px-6 py-2.5 dark:bg-cyan-500">
             <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                 {
                     user.username
@@ -45,8 +46,9 @@ const Header = () => {
                         <li>
                             <a href="#" className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Anasayfa</a>
                         </li>
+                        
                         <li>
-                            <a href="#" className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Listele</a>
+                            <a href="/list" className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Listele</a>
                         </li>
                         
                     </ul>
@@ -57,7 +59,7 @@ const Header = () => {
                             </span>
                             &nbsp;
                             { 
-                                user.role == "admin" && <span className="dark:text-white font-bold">{user.username}</span>
+                                user.role == RoleTypes.admin && <span className="dark:text-white font-bold">{user.username}</span>
                             }
                         </div>
                         <div className="flex items-center lg:order-2 ">

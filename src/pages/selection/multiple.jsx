@@ -71,7 +71,6 @@ const Multiple = () => {
         return number["Öğrenci No"] == user.username;
       });
       console.log(filteredData)
-      
       setData(filteredData);
       
       console.log(Object.keys(parsedData))

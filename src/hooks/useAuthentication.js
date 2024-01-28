@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { clearUserData, setUser } from "../redux/features/UserSlice";
+import { RoleTypes } from "../RoleTypes";
 
 
 const useAuthentication = () => {
@@ -34,7 +35,7 @@ const useAuthentication = () => {
             const userData = {
                 username,
                 password,
-                "role": "user"
+                role: RoleTypes.user
             };
               
             dispatch(setUser(userData));
@@ -78,7 +79,7 @@ const useAuthentication = () => {
             const userData = {
                 username,
                 password,
-                "role": "admin"
+                role: RoleTypes.admin
             };
               
             dispatch(setUser(userData));

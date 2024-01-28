@@ -1,28 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDocs, query, where } from "firebase/firestore";
+import { firestore, storage } from '../../firebase';
+import {useSelector} from "react-redux";
+
+import { RoleTypes } from '../../RoleTypes';
 
 function List() {
 
   const [data, setData] = useState(null);
 
-  useEffect(async () => {
+   const user = useSelector(({UserSlice}) => UserSlice.user);
 
-    const docRef = doc(db, "cities", "SF");
-    const docSnap = await getDoc(docRef);
-    
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+  useEffect(() => {
+
+    const fetchDocs = async() => {
       
-    } else {
-      // docSnap.data() will be undefined in this case
-      console.log("No such document!");
+        let querySnapshot = 
+        user.role == RoleTypes.admin 
+        ? await getDocs(collection(firestore, "files")) 
+        : await getDocs(query(collection(firestore, "files"), where("owner", "==", user.username)));
+        
+        console.log(querySnapshot.docs);
+        setData(querySnapshot.docs);
     }
+    fetchDocs();
 
   }, [])
 
-  return (
+  return ( 
     <>
-
+   <h5>List Page</h5>
+      {
+        data && data.map(e =>
+          <>
+          <h1>{e.data().title}</h1>
+          <a href='' ></a>
+          </>
+        )
+      }
     </>
   );
 }

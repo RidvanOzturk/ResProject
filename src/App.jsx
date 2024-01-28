@@ -49,7 +49,7 @@ function App() {
                   <Route path="/login" element={<GuestGuard><UserLogin /></GuestGuard>} />
                   <Route path="/panel-login" element={<GuestGuard><AdminLogin /></GuestGuard>} />
                   <Route path="/result" element={<AdminGuard><Result /></AdminGuard>} />
-                  <Route path='/list' element={<AuthGuard><List /></AuthGuard>} />
+                  <Route path='/list' element={<AdminGuard><List /></AdminGuard>} />
                   <Route path='/multiple' element={<AuthGuard><Multiple /></AuthGuard>} />
                 </Routes>
               </Layout>

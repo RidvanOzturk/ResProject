@@ -6,7 +6,7 @@ const AdminGuard = ({children}) => {
 
     const user = useSelector(({UserSlice}) => UserSlice.user);
 
-    if(!user.username || user.role !== "admin"){
+    if(!user.username || user.role !== "1"){
         return <Navigate to="/login" />
     }
 
