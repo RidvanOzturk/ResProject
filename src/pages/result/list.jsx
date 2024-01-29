@@ -13,14 +13,17 @@ function List() {
 
   useEffect(() => {
 
+
     const fetchDocs = async() => {
-      
+    
+      console.log(user.role)
+      console.log( user.role == RoleTypes.admin )
         let querySnapshot = 
         user.role == RoleTypes.admin 
         ? await getDocs(collection(firestore, "files")) 
         : await getDocs(query(collection(firestore, "files"), where("owner", "==", user.username)));
         
-        console.log(querySnapshot.docs);
+        console.log(querySnapshot.docs[0]);
         setData(querySnapshot.docs);
     }
     fetchDocs();
@@ -33,7 +36,8 @@ function List() {
       {
         data && data.map(e =>
           <>
-          <a href='/multiple' >{e.data().title}</a>
+          <a href="/detail">{e.data().title}</a>
+          <br/>
           </>
         )
       }

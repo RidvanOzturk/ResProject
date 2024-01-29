@@ -68,7 +68,7 @@ const Multiple = () => {
 
       console.log(parsedData)
       let filteredData = 
-      user.role==RoleTypes.user
+      user.role == RoleTypes.user
       ? parsedData.filter((number) => number["Öğrenci No"] == user.username)
       :parsedData;
       setData(filteredData);
