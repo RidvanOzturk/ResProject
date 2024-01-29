@@ -6,7 +6,7 @@ import { storage, firestore } from '../../firebase';
 import { doc, getDoc, getDocs, collection  } from "firebase/firestore";
 
 import { ref, getDownloadURL } from "firebase/storage";
-
+import { RoleTypes } from '../../RoleTypes';
 import * as XLSX from "xlsx";
 
 const Multiple = () => {
@@ -67,16 +67,17 @@ const Multiple = () => {
       const parsedData = XLSX.utils.sheet_to_json(sheet);
 
       console.log(parsedData)
-      let filteredData = parsedData.filter((number) => {
-        return number["Öğrenci No"] == user.username;
-      });
-      console.log(filteredData)
+      let filteredData = 
+      user.role==RoleTypes.user
+      ? parsedData.filter((number) => number["Öğrenci No"] == user.username)
+      :parsedData;
       setData(filteredData);
+    }
       
       console.log(Object.keys(parsedData))
       console.log(parsedData)
 
-    };
+    
   }
 
   const URLtoFile = async url => {

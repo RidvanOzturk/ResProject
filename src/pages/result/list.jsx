@@ -33,8 +33,7 @@ function List() {
       {
         data && data.map(e =>
           <>
-          <h1>{e.data().title}</h1>
-          <a href='' ></a>
+          <a href='/multiple' >{e.data().title}</a>
           </>
         )
       }
