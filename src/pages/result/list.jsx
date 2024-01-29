@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { collection, doc, getDocs, query, where } from "firebase/firestore";
-import { firestore, storage } from '../../firebase';
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { firestore } from '../../firebase';
 import {useSelector} from "react-redux";
 
 import { RoleTypes } from '../../RoleTypes';
+import { Link } from 'react-router-dom';
 
 function List() {
 
@@ -34,9 +35,9 @@ function List() {
     <>
    <h5>List Page</h5>
       {
-        data && data.map(e =>
+        data && data.map(value =>
           <>
-          <a href="/detail">{e.data().title}</a>
+          <Link to={value.id}>{value.data().title}</Link>
           <br/>
           </>
         )

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 
 
@@ -16,9 +15,6 @@ import {
   Routes,
   Route,
   Link,
-  Outlet,
-  useParams,
-  BrowserRouter
 } from 'react-router-dom';
 
 
@@ -32,6 +28,7 @@ import Layout from './components/Layout';
 import Footer from './components/Footer';
 import List from './pages/result/list';
 import Multiple from './pages/selection/multiple';
+import ListDetail from './pages/result/list-detail';
 
 function App() {
   
@@ -51,7 +48,7 @@ function App() {
                   <Route path="/result" element={<AdminGuard><Result /></AdminGuard>} />
 
                   <Route path='/list' element={<AdminGuard><List /></AdminGuard>} />
-                  <Route path='/list/:id' element={<AdminGuard><List /></AdminGuard>} />
+                  <Route path='/list/:id' element={<AdminGuard><ListDetail /></AdminGuard>} />
 
                   <Route path='/multiple' element={<AuthGuard><Multiple /></AuthGuard>} />
                 </Routes>

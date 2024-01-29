@@ -2,10 +2,9 @@ import React,{ useState, useEffect } from 'react'
 
 import {useSelector} from "react-redux";
 
-import { storage, firestore } from '../../firebase';
-import { doc, getDoc, getDocs, collection  } from "firebase/firestore";
+import { firestore } from '../../firebase';
+import { getDocs, collection  } from "firebase/firestore";
 
-import { ref, getDownloadURL } from "firebase/storage";
 import { RoleTypes } from '../../RoleTypes';
 import * as XLSX from "xlsx";
 
