@@ -15,7 +15,6 @@ const ListDetail = () => {
       const querySnapshot = await getDocs(query(collection(firestore, "files"), where(documentId(), "==", id)))
       handleFileUpload(querySnapshot.docs[0].data().url);
     }
-
     fetchDocById().then(response => setDocData(response))
     
   }, [])
@@ -36,9 +35,7 @@ const ListDetail = () => {
       
       setDocData(parsedData);
     }
-
   }
-
   const URLtoFile = async url => {
 
     const res = await fetch(url);
@@ -59,7 +56,6 @@ const ListDetail = () => {
     // Creates new File object using blob data, extension and MIME type
   
     console.log(file);
-
     return file;
 
   }

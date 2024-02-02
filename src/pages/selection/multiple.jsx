@@ -72,7 +72,6 @@ const Multiple = () => {
       :parsedData;
       setData(filteredData);
     }
-      
       console.log(Object.keys(parsedData))
       console.log(parsedData)
 

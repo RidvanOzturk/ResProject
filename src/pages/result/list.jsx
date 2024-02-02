@@ -8,24 +8,10 @@ import { Link } from 'react-router-dom';
 
 function List() {
 
-  const [data, setData] = useState(null);
-
+   const [data, setData] = useState(null);
    const user = useSelector(({UserSlice}) => UserSlice.user);
 
   useEffect(() => {
-
-    /*   const userCollectionRef = collection(firestore, 'files', user.username, 'uploaded_data');
-
-    // Verileri çekme
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(userCollectionRef);
-        const newData = querySnapshot.docs.map(doc => doc.data());
-        setUserData(newData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };*/
 
     const fetchDocs = async() => {
     
@@ -40,7 +26,6 @@ function List() {
         setData(querySnapshot.docs);
     }
     fetchDocs();
-
   }, [])
 
   return ( 
