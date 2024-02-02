@@ -11,7 +11,7 @@ const useAuthentication = () => {
     const [message, setMessage] = useState(null);
 
 
-    const userLoginCall = async({username, password}) => {
+    const userLoginCall = async({no}) => {
 
         setIsLoading(true)
 
@@ -21,7 +21,7 @@ const useAuthentication = () => {
             const response = await axios.post(
                 "api_connection_url",
                 {
-                    username, password
+                    no,
                 },
                 {   
                   headers: { "Content-Type": "application/json" },
@@ -33,8 +33,7 @@ const useAuthentication = () => {
             console.log("Axios Post!");
 
             const userData = {
-                username,
-                password,
+                no,
                 role: RoleTypes.user
             };
               
@@ -46,7 +45,7 @@ const useAuthentication = () => {
             console.log(err);
 
             setMessage({
-                content: "Incorrect mail or password, please try again!",
+                content: "Incorrect student no, please try again!",
                 isError: true
             });
         }

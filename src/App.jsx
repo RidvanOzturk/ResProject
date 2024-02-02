@@ -23,12 +23,12 @@ import Layout from './components/Layout';
 
   import UserLogin from "./pages/login/UserLogin"
   import AdminLogin from "./pages/login/AdminLogin"
-  import Result from "./pages/result"
 
 import Footer from './components/Footer';
 import List from './pages/result/list';
 import Multiple from './pages/selection/multiple';
 import ListDetail from './pages/result/list-detail';
+import AddFile from './pages/result/addFile';
 
 function App() {
   
@@ -42,10 +42,10 @@ function App() {
               <Header/>
               <Layout>
                 <Routes>
-                  <Route path="/" element={<GuestGuard><UserLogin /></GuestGuard>} />
+                  <Route path="/" element={<AdminGuard><AddFile /></AdminGuard>} />
                   <Route path="/login" element={<GuestGuard><UserLogin /></GuestGuard>} />
                   <Route path="/panel-login" element={<GuestGuard><AdminLogin /></GuestGuard>} />
-                  <Route path="/result" element={<AdminGuard><Result /></AdminGuard>} />
+                  <Route path="/result" element={<AdminGuard><AddFile /></AdminGuard>} />
 
                   <Route path='/list' element={<AdminGuard><List /></AdminGuard>} />
                   <Route path='/list/:id' element={<AdminGuard><ListDetail /></AdminGuard>} />

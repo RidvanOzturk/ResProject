@@ -10,13 +10,12 @@ function UserLogin() {
 
   const {isLoading, message, userLoginCall} = useAuthentication();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [no, setNo] = useState("");
 
   const handleSubmit = async event => {
     event.preventDefault();
     
-    await userLoginCall({username, password})
+    await userLoginCall({no})
   };
     
   return (
@@ -26,12 +25,8 @@ function UserLogin() {
         <div className="form">
           <form onSubmit={handleSubmit}>
             <div className="input-container">
-              <label>Username </label>
-              <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
-            </div>
-            <div className="input-container">
-              <label>Password </label>
-              <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <label>Tc Giriniz </label>
+              <input type="text" name="username" value={no} onChange={(e) => setNo(e.target.value)} required />
             </div>
             <div className="button-container">
               <input type="submit" value="Enter" />
