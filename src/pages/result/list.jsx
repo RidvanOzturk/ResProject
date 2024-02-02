@@ -14,6 +14,18 @@ function List() {
 
   useEffect(() => {
 
+    /*   const userCollectionRef = collection(firestore, 'files', user.username, 'uploaded_data');
+
+    // Verileri çekme
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(userCollectionRef);
+        const newData = querySnapshot.docs.map(doc => doc.data());
+        setUserData(newData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };*/
 
     const fetchDocs = async() => {
     
@@ -21,8 +33,8 @@ function List() {
       console.log( user.role == RoleTypes.admin )
         let querySnapshot = 
         user.role == RoleTypes.admin 
-        ? await getDocs(collection(firestore, "files")) 
-        : await getDocs(query(collection(firestore, "files"), where("owner", "==", user.username)));
+        ? await getDocs(query(collection(firestore, "files"), where("owner", "==", user.username)))
+        : null;
         
         console.log(querySnapshot.docs[0]);
         setData(querySnapshot.docs);
@@ -35,7 +47,7 @@ function List() {
     <>
    <h5>List Page</h5>
       {
-        data && data.map(value =>
+        data && data.map((value) =>
           <>
           <Link to={value.id}>{value.data().title}</Link>
           <br/>

@@ -17,7 +17,7 @@ const ListDetail = () => {
     }
 
     fetchDocById().then(response => setDocData(response))
-
+    
   }, [])
   const handleFileUpload = async (url) => {
 
