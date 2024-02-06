@@ -5,7 +5,6 @@ import {Navigate} from "react-router-dom";
 const AuthGuard = ({children}) => {
 
     const user = useSelector(({UserSlice}) => UserSlice.user);
-
     if(!user.username){
         return <Navigate to="/login" />
     }

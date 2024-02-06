@@ -11,7 +11,7 @@ const useAuthentication = () => {
     const [message, setMessage] = useState(null);
 
 
-    const userLoginCall = async({no}) => {
+    const userLoginCall = async({username}) => {
 
         setIsLoading(true)
 
@@ -33,12 +33,12 @@ const useAuthentication = () => {
             console.log("Axios Post!");
 
             const userData = {
-                no,
+                username,
                 role: RoleTypes.user
             };
               
             dispatch(setUser(userData));
-
+            console.log(setUser(userData))
         }
         catch(e) {
 
