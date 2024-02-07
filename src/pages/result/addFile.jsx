@@ -179,8 +179,16 @@ function AddFile() {
 
             <div className="col-span-full">
               <div className="mt-2 flex items-center gap-x-3">
-                <DatePicker showIcon selected={startDate} dateFormat="dd/MM/yyyy" onChange={(date) => handleStartDateChange(date)} />
-                <DatePicker showIcon selected={endDate} dateFormat="dd/MM/yyyy" onChange={(date) => handleEndDateChange(date)} />
+                <DatePicker showIcon selected={startDate}
+        selectsStart
+        startDate={startDate}
+        endDate={endDate}
+maxDate={endDate} dateFormat="dd/MM/yyyy" onChange={(date) => handleStartDateChange(date)} />
+                <DatePicker showIcon selected={endDate}
+        selectsEnd
+        startDate={startDate}
+        endDate={endDate}
+        minDate={startDate}  dateFormat="dd/MM/yyyy" onChange={(date) => handleEndDateChange(date)} />
               </div>
             </div>
 

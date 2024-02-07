@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { QuerySnapshot, collection, getDocs, query, serverTimestamp, where } from "firebase/firestore";
 import { firestore } from '../../firebase';
 import {useSelector} from "react-redux";
 
@@ -10,22 +10,27 @@ function List() {
 
    const [data, setData] = useState(null);
    const user = useSelector(({UserSlice}) => UserSlice.user);
-
+  const date = Date();
   useEffect(() => {
 
+
     const fetchDocs = async() => {
-    
-      console.log(user.role)
-      console.log( user.role == RoleTypes.admin )
-        let querySnapshot = 
-        user.role == RoleTypes.admin 
-        ? await getDocs(query(collection(firestore, "files"), where("owner", "==", user.username)))
-        : null;
-        
-        console.log(querySnapshot.docs[0]);
-        setData(querySnapshot.docs);
+
+      if(user.role !== RoleTypes.admin) {
+        return;
+      }
+
+        const querySnapshot = query(
+                                collection(firestore, "files"), 
+                                  where("startDate", ">=", new Date(), "&&", "owner", "==", user.username));
+          
+        const querySnapshotResult = await getDocs(querySnapshot);
+
+        console.log(querySnapshotResult.docs[0]);
+        setData(querySnapshotResult.docs);
     }
     fetchDocs();
+
   }, [])
 
   return ( 
