@@ -15,21 +15,6 @@ const Multiple = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-   /*
-    const fetchData = async () => {
-        
-      getDownloadURL(ref(storage, 'files/Sonuç3.xlsx'))
-        .then((url) => {
-
-            handleFileUpload(url)
-            console.log(url)
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-    }
-    
-    fetchData();*/
 
     const fetchDocs = async () => {
 

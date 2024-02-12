@@ -22,7 +22,7 @@ function List() {
 
         const querySnapshot = query(
                                 collection(firestore, "files"), 
-                                  where("startDate", ">=", new Date(), "&&", "owner", "==", user.username));
+                                  where("owner", "==", user.username));
           
         const querySnapshotResult = await getDocs(querySnapshot);
 

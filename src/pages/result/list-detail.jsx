@@ -1,4 +1,4 @@
-import { documentId, getDocs, collection, query, where } from 'firebase/firestore';
+import { documentId, getDocs, collection, query, where, Timestamp } from 'firebase/firestore';
 import { firestore } from '../../firebase';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -11,72 +11,71 @@ const ListDetail = () => {
 
   useEffect(() => {
 
+
     const fetchDocById = async () => {
-      const querySnapshot = await getDocs(query(collection(firestore, "files"), where(documentId(), "==", id)))
-      handleFileUpload(querySnapshot.docs[0].data().url);
+
+        const idQuery = where(documentId(), "==", id);
+        const querySnapshot = await getDocs(query(collection(firestore, "files"), idQuery));
+
+        if(querySnapshot.docs[0]){
+
+            const fetchedData = querySnapshot.docs[0].data();
+            const currentDateTimestamp = Timestamp.fromDate(new Date())
+            
+            if(currentDateTimestamp > fetchedData.startDate && currentDateTimestamp < fetchedData.endDate){
+
+                const url = querySnapshot.docs[0].data().url;
+                const file = await URLtoFile(url);
+                const xlsTable = await FileToXLS(file);
+
+                return xlsTable;
+            }
+        }
+
+        return null;
     }
-    fetchDocById().then(response => setDocData(response))
+
+    fetchDocById().then(response => {
+        console.log(response);
+         setDocData(response)
+    })
     
   }, [])
-  const handleFileUpload = async (url) => {
 
-    const e = await URLtoFile(url);
 
-    const reader = new FileReader();
-    reader.readAsBinaryString(e);
-    reader.onload = (e) => {
-      const data = e.target.result;
-      const workbook = XLSX.read(data, { type: "binary" });
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const parsedData = XLSX.utils.sheet_to_json(sheet);
+    const URLtoFile = async url => {
 
-      console.log(parsedData)
-      
-      setDocData(parsedData);
+        const res = await fetch(url);
+        const blob = await res.blob();
+
+        const mime = blob.type;
+        const ext = mime.slice(mime.lastIndexOf("/") + 1, mime.length);
+            
+        const file = new File([blob], `filename.${ext}`, { type: mime });
+
+        return file;
     }
-  }
-  const URLtoFile = async url => {
+    const FileToXLS = file => {
 
-    const res = await fetch(url);
-    const blob = await res.blob();
-    // Gets URL data and read to blob
-  
-    console.log(url);
-  
-    console.log(blob);
-  
-    const mime = blob.type;
-    const ext = mime.slice(mime.lastIndexOf("/") + 1, mime.length);
-    // Gets blob MIME type (e.g. image/png) and extracts extension
-        
-    const file = new File([blob], `filename.${ext}`, {
-        type: mime,
-    })
-    // Creates new File object using blob data, extension and MIME type
-  
-    console.log(file);
-    return file;
+        return new Promise((resolve, reject) => { 
 
-  }
+            const reader = new FileReader();
+            reader.readAsBinaryString(file);
+            reader.onload = (e) => {
+                const data = e.target.result;
+                const workbook = XLSX.read(data, { type: "binary" });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+                const parsedData = XLSX.utils.sheet_to_json(sheet);
+                
+                resolve(parsedData);
+            }
+
+        }); 
+    }
+
   return (
-    <>
-      
-         <div className="relative overflow-x-auto">
-        {
-        /*
-            Teklide
-
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            data && Object.keys(data).map((key, index) => (
-                <tr key={index}>
-                    <td>{key}</td>
-                    <td>{data[key]}</td>
-                </tr>
-                ))
-        </table>
-        */
-        }
+    <div className="relative overflow-x-auto">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -111,9 +110,6 @@ const ListDetail = () => {
         </tbody>
     </table>
 </div>
-        
-    </>
   )
 }
-
 export default ListDetail
