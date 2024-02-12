@@ -26,7 +26,6 @@ import Layout from './components/Layout';
 
 import Footer from './components/Footer';
 import List from './pages/result/list';
-import Multiple from './pages/selection/multiple';
 import ListDetail from './pages/result/list-detail';
 import AddFile from './pages/result/addFile';
 
@@ -51,7 +50,6 @@ function App() {
                   <Route path='/list' element={<AdminGuard><List /></AdminGuard>} />
                   <Route path='/list/:id' element={<ListDetail />} />
 
-                  <Route path='/multiple/:id' element={<AuthGuard><Multiple /></AuthGuard>} />
                 </Routes>
               </Layout>
 

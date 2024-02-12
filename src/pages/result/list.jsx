@@ -35,7 +35,8 @@ function List() {
 
   return ( 
     <>
-   <h5>List Page</h5>
+   <h1 className='text-center text-2xl font-bold'>List Page</h1>
+   <br/>
       {
         data && data.map((value) =>
           <>

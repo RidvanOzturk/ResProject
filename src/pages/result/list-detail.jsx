@@ -6,6 +6,7 @@ import * as XLSX from "xlsx";
 import { RoleTypes } from '../../RoleTypes';
 import {useSelector} from "react-redux";
 import UserLogin from '../login/UserLogin';
+
 const ListDetail = () => {
 
   const {id} = useParams()
@@ -39,7 +40,6 @@ const ListDetail = () => {
                 
                 const filteredData = user.role == RoleTypes.user ? xlsTable.filter((number) => number["Öğrenci No"] == user.username) : xlsTable;
 
-                if(fetchedData.isSingle !=true) single=false;
                 return filteredData;
             }
         }
@@ -89,6 +89,8 @@ const ListDetail = () => {
   return (
     user.username
     ?
+    <>
+    <br/><br/> 
     <div className="relative overflow-x-auto">
         {
             isLoading ? "Loading..."
@@ -128,10 +130,12 @@ const ListDetail = () => {
                 }
             </tbody>
         </table>
+       
         :"Eşleşen data yok"
          
         }
     </div>   
+    </>
     : 
     <UserLogin/>
   )
