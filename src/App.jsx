@@ -43,14 +43,15 @@ function App() {
               <Layout>
                 <Routes>
                   <Route path="/" element={<AdminGuard><AddFile /></AdminGuard>} />
+                  <Route path="/addfile" element={<AdminGuard><AddFile /></AdminGuard>} />
                   <Route path="/login" element={<GuestGuard><UserLogin /></GuestGuard>} />
                   <Route path="/panel-login" element={<GuestGuard><AdminLogin /></GuestGuard>} />
                   <Route path="/result" element={<AdminGuard><AddFile /></AdminGuard>} />
 
                   <Route path='/list' element={<AdminGuard><List /></AdminGuard>} />
-                  <Route path='/list/:id' element={<AdminGuard><ListDetail /></AdminGuard>} />
+                  <Route path='/list/:id' element={<ListDetail />} />
 
-                  <Route path='/multiple' element={<AuthGuard><Multiple /></AuthGuard>} />
+                  <Route path='/multiple/:id' element={<AuthGuard><Multiple /></AuthGuard>} />
                 </Routes>
               </Layout>
 
