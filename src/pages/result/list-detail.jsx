@@ -24,7 +24,6 @@ const ListDetail = () => {
         if(!user.username) return null;
 
         const idQuery = where(documentId(), "==", id);
-        //const ownerQuery = where("owner", "==", user.username);
         const querySnapshot = await getDocs(query(collection(firestore, "files"), idQuery ));
 
         if(querySnapshot.docs[0]){
@@ -33,7 +32,6 @@ const ListDetail = () => {
             const currentDateTimestamp = Timestamp.fromDate(new Date())
             
             if(currentDateTimestamp > fetchedData.startDate && currentDateTimestamp < fetchedData.endDate){
-                const single = true;
                 const url = querySnapshot.docs[0].data().url;
                 const file = await URLtoFile(url);
                 const xlsTable = await FileToXLS(file);

@@ -21,11 +21,11 @@ function UserLogin() {
   return (
     <div className="app">
       <div className="login-form">
-        <div className="title">User Log In</div>
+        <div className="title">Sonuç Sorgula</div>
         <div className="form">
           <form onSubmit={handleSubmit}>
             <div className="input-container">
-              <label>Tc Giriniz </label>
+              <label>Öğrenci No Giriniz </label>
               <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
             </div>
             <div className="button-container">
