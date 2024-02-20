@@ -42,7 +42,10 @@ function App() {
               <Layout>
                 <Routes>
                   <Route path="/" element={<AdminGuard><AddFile /></AdminGuard>} />
+
                   <Route path="/addfile" element={<AdminGuard><AddFile /></AdminGuard>} />
+                  <Route path="/addfile/:id" element={<AdminGuard><AddFile /></AdminGuard>} />
+
                   <Route path="/login" element={<GuestGuard><UserLogin /></GuestGuard>} />
                   <Route path="/panel-login" element={<GuestGuard><AdminLogin /></GuestGuard>} />
                   <Route path="/result" element={<AdminGuard><AddFile /></AdminGuard>} />

@@ -26,7 +26,9 @@ const Header = () => {
         message = 'Günaydın';
         else if (hrs >= 12 && hrs <= 17)
         message = 'Tünaydın';
-        else if (hrs >= 17 && hrs <= 24)
+        else if (hrs >= 17 && hrs <= 22)
+        message = 'İyi Akşamlar';
+        else if (hrs >= 22 && hrs <= 5)
         message = 'İyi Geceler';
 
         return message;
@@ -34,7 +36,7 @@ const Header = () => {
 
   return (
     
-     <nav className="bg-white border-white px-4 lg:px-6 py-2.5 dark:bg-cyan-500">
+     <nav className="bg-cyan-500 border-white px-4 lg:px-6 py-2.5 dark:bg-cyan-500">
             <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                 {
                    user.username
@@ -47,11 +49,11 @@ const Header = () => {
                         ?
                         <>
                         <li>
-                            <a href="/addFile" className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Dosya Ekle</a>
+                            <a href="/addFile" className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 ">Dosya Ekle</a>
                         </li>
                         
                         <li>
-                            <a href="/list" className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0 dark:text-white lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Listele</a>
+                            <a href="/list" className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-blue-700 lg:p-0">Listele</a>
                         </li>
                         </>
                         :null
@@ -59,18 +61,18 @@ const Header = () => {
                     </ul>
                 </div>
                         <div className="flex items-center lg:order-2">
-                            <span className="dark:text-white">
+                            <span className="text-white">
                                 {welcomeText()}
                             </span>
                             &nbsp;
                             { 
-                                user.role == RoleTypes.admin && <span className="dark:text-white font-bold">{user.username}</span>
+                                user.role == RoleTypes.admin && <span className="text-white font-bold">{user.username}</span>
                             }
                         </div>
                         <div className="flex items-center lg:order-2 ">
                             <button type="button"
                             onClick={handleLogout}
-                            className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                            className="text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2   ">
                                 Çıkış
                             </button>
                         </div>

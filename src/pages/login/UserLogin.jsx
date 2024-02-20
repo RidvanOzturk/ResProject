@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 
 import useAuthentication from "../../hooks/useAuthentication";
-
 import { NavLink, useNavigate } from "react-router-dom";
 
 function UserLogin() {
   
   const navigate = useNavigate();
-
   const {isLoading, message, userLoginCall} = useAuthentication();
 
   const [username, setUsername] = useState("");
-
   const handleSubmit = async event => {
     event.preventDefault();
     
