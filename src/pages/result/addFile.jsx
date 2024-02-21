@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Swal from "sweetalert2";
+import fileTypeChecker from "file-type-checker";
 import { storage, firestore } from "../../firebase";
 import {
   getDownloadURL,
@@ -30,11 +31,12 @@ function AddFile() {
   const [isLoading, setIsLoading] = useState(true);
 
   const user = useSelector(({ UserSlice }) => UserSlice.user);
-
+  const allowedTypes = ["xlsx","xlsm","xlsb","xltx"];
   const [uploadIsStarted, setUploadIsStarted] = useState(false);
 
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
+  const allowedExtension = ["xlsx"];
 
   const [title, setTitle] = useState(null);
   const [description, setDescription] = useState(null);
@@ -42,7 +44,6 @@ function AddFile() {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [file, setFile] = useState(null);
-
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
@@ -59,7 +60,20 @@ function AddFile() {
     setEndDate(date);
   };
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const file = e?.target?.files[0];
+    const fileExtension = e.target.files[0].name.split(".")[1];
+    if (allowedExtension.includes(fileExtension)) {
+      console.log(file);
+      setFile(file);
+
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Lütfen Sadece Excel Dosyası Yükleyiniz",
+        footer: "İzin verilen formatlar: .xlsx .xls",
+      });
+    }
   };
 
   useEffect(() => {
@@ -103,9 +117,15 @@ function AddFile() {
         text: "Lütfen tüm boşlukları doldurunuz.",
         footer: "Alanları eksiksiz doldurunuz.",
       });
+      
       return;
     }
+    
 
+
+
+    
+console.log(file.type)
     
     setUploadIsStarted(true);
 
@@ -344,22 +364,22 @@ function AddFile() {
                       {file ? (
                         <>
                           <span className="font-semibold">Seçilen Dosya: </span>{" "}
-                          {title}
                         </>
                       ) : (
                         <>
-                          <span className="font-semibold">Click to upload</span>{" "}
-                          or drag and drop
+                          <span className="font-semibold">Yüklemek İçin Tıklayınız</span>{" "}
                         </>
                       )}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {file === null ? <>XLS, CSV (MAX. 50MB)</> : file.name}
+                      {file === null ? <>İzin verilen formatlar: .xlsx, .xls</> : file.name}
                     </p>
                   </div>
                   <input
                     id="dropzone-file"
                     type="file"
+                    accept=".xlsx, .xls"
+                    required
                     className="hidden"
                     onChange={handleFileChange}
                   />

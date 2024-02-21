@@ -6,6 +6,7 @@ import * as XLSX from "xlsx";
 import { RoleTypes } from '../../RoleTypes';
 import {useSelector} from "react-redux";
 import UserLogin from '../login/UserLogin';
+import Swal from 'sweetalert2';
 
 const ListDetail = () => {
 
@@ -129,7 +130,12 @@ const ListDetail = () => {
             </tbody>
         </table>
        
-        :"Eşleşen data yok"
+        :<>{Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Eşleşen Tarihte Veri Yok",
+            footer: "",
+          })}</>
          
         }
     </div>   
