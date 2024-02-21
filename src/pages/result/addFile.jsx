@@ -18,6 +18,9 @@ import {
   serverTimestamp,
   where,
   documentId,
+  updateDoc,
+  setDoc,
+  doc,
 } from "firebase/firestore";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -32,7 +35,6 @@ function AddFile() {
 
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
-  const [url, setUrl] = useState(null);
 
   const [title, setTitle] = useState(null);
   const [description, setDescription] = useState(null);
@@ -88,11 +90,12 @@ function AddFile() {
       setIsSingle(response.isSingle);
       setStartDate(response.startDate.toDate());
       setEndDate(response.endDate.toDate());
+      setFile(response.url);
       setIsLoading(false);
     });
   }, []);
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async() => {
     if (title === null || file === null) {
       Swal.fire({
         icon: "error",
@@ -103,72 +106,98 @@ function AddFile() {
       return;
     }
 
+    
     setUploadIsStarted(true);
 
-    // Firebase Storage
-    const storageRef = ref(storage, `files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file, file.type);
-    // Firebase Firestore
-    const collectionRef = collection(firestore, "files");
+    const uploadedFileUrl = ('File' in window && file instanceof File) ? await uploadFileToStorage(file) : file;
+    console.log(uploadedFileUrl)
+    await uploadDocToFirebase(uploadedFileUrl);
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setProgress(progress);
-        // console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-        }
-      },
-      (err) => {
-        // A full list of error codes is available at https://firebase.google.com/docs/storage/web/handle-errors
-        switch (err.code) {
-          case "storage/unauthorized":
-            setError("You don't have permission to upload!");
-            break;
-          case "storage/canceled":
-            setError("Upload cancelled!");
-            break;
-          case "storage/unknown":
-            setError("An unknown error occurred!");
-            break;
-          default:
-            setError(err);
-            break;
-        }
-      },
-      () => {
-        // Upload completed successfully, now we can get the download URL
-        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          try {
-            const docRef = await addDoc(collectionRef, {
-              owner: user.username,
-              url: downloadURL,
-              title,
-              description,
-              isSingle,
-              startDate,
-              endDate,
-              createdAt: serverTimestamp(),
-            });
-            console.log("Document written with ID: ", docRef.id);
-            setUrl(downloadURL);
-            setUploadIsStarted(false);
-          } catch (e) {
-            console.error("Error adding document: ", e);
-          }
-        });
-      }
-    );
+
+    setUploadIsStarted(false);
   };
+
+  const uploadFileToStorage = async (file) => {
+
+    return new Promise((resolve, reject) => {
+
+      // Firebase Storage
+      const storageRef = ref(storage, `files/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file, file.type);
+      // Firebase Firestore
+      const collectionRef = collection(firestore, "files");
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setProgress(progress);
+          // console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (err) => {
+          // A full list of error codes is available at https://firebase.google.com/docs/storage/web/handle-errors
+          switch (err.code) {
+            case "storage/unauthorized":
+              setError("You don't have permission to upload!");
+              break;
+            case "storage/canceled":
+              setError("Upload cancelled!");
+              break;
+            case "storage/unknown":
+              setError("An unknown error occurred!");
+              break;
+            default:
+              setError(err);
+              break;
+          }
+          reject();
+        },
+        () => {
+          // Upload completed successfully, now we can get the download URL
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("download url ready: " + downloadURL);
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
+  };
+
+  const uploadDocToFirebase = async (uploadedFileUrl) => {
+
+    try {
+      const data = {
+        owner: user.username,
+        url: uploadedFileUrl,
+        title,
+        description,
+        isSingle,
+        startDate,
+        endDate,
+        createdAt: serverTimestamp(),
+      };
+      console.log(data)
+      const docRef = id ? await setDoc(doc(firestore, "files", id), data) : await addDoc(collection(firestore, "files"), data);
+      console.log(docRef)
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+
+  useEffect(()=>{
+    console.log(file)
+    console.log(('File' in window && file instanceof File))
+  }, [file])
 
   return uploadIsStarted ? (
     <div className="py-10">
@@ -312,8 +341,17 @@ function AddFile() {
                       />
                     </svg>
                     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                      <span className="font-semibold">Click to upload</span> or
-                      drag and drop
+                      {file ? (
+                        <>
+                          <span className="font-semibold">Seçilen Dosya: </span>{" "}
+                          {title}
+                        </>
+                      ) : (
+                        <>
+                          <span className="font-semibold">Click to upload</span>{" "}
+                          or drag and drop
+                        </>
+                      )}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                       {file === null ? <>XLS, CSV (MAX. 50MB)</> : file.name}
@@ -333,13 +371,13 @@ function AddFile() {
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button
-          type="button"
-          onClick={handleFormSubmit}
-          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          Kaydet
-        </button>
+      <button
+            type="button"
+            onClick={handleFormSubmit}
+            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            {id ? "Güncelle" : "Kaydet"}
+          </button>
       </div>
     </form>
   );
