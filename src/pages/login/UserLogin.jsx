@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import useAuthentication from "../../hooks/useAuthentication";
 import { NavLink, useNavigate } from "react-router-dom";
 
-function UserLogin() {
+function UserLogin({docTitle, docDesc}) {
   
   const navigate = useNavigate();
   const {isLoading, message, userLoginCall} = useAuthentication();
@@ -18,7 +18,13 @@ function UserLogin() {
   return (
     <div className="app">
       <div className="login-form">
-        <div className="title">Sonuç Sorgula</div>
+        <div className="title">
+          <div>Sonuç Sorgula</div>
+          <div>{docTitle}</div>
+        </div>
+        <div className="desc">
+          <div>{docDesc}</div>
+        </div>
         <div className="form">
           <form onSubmit={handleSubmit}>
             <div className="input-container">

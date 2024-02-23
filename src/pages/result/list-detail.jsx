@@ -6,7 +6,8 @@ import * as XLSX from "xlsx";
 import { RoleTypes } from '../../RoleTypes';
 import {useSelector} from "react-redux";
 import UserLogin from '../login/UserLogin';
-import Swal from 'sweetalert2';
+import { Spinner } from 'flowbite-react';
+
 
 const ListDetail = () => {
 
@@ -14,15 +15,15 @@ const ListDetail = () => {
   const user = useSelector(({UserSlice}) => UserSlice.user);
 
 
+  const [isDocLoading, setIsDocLoading] = useState(true);
+  const [isTableLoading, setIsTableLoading] = useState(true);
+
   const [docData, setDocData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [tableData, setTableData] = useState(null);
 
   useEffect(() => {
 
-
     const fetchDocById = async () => {
-
-        if(!user.username) return null;
 
         const idQuery = where(documentId(), "==", id);
         const querySnapshot = await getDocs(query(collection(firestore, "files"), idQuery ));
@@ -30,17 +31,7 @@ const ListDetail = () => {
         if(querySnapshot.docs[0]){
 
             const fetchedData = querySnapshot.docs[0].data();
-            const currentDateTimestamp = Timestamp.fromDate(new Date())
-            
-            if(currentDateTimestamp > fetchedData.startDate && currentDateTimestamp < fetchedData.endDate){
-                const url = querySnapshot.docs[0].data().url;
-                const file = await URLtoFile(url);
-                const xlsTable = await FileToXLS(file);
-                
-                const filteredData = user.role == RoleTypes.user ? xlsTable.filter((number) => number["Öğrenci No"] == user.username) : xlsTable;
-
-                return filteredData;
-            }
+            return fetchedData;
         }
 
         return null;
@@ -48,8 +39,37 @@ const ListDetail = () => {
 
     fetchDocById().then(response => {
         
-         setIsLoading(false);
+         setIsDocLoading(false);
          setDocData(response)
+    })
+
+  }, []);
+
+  useEffect(() => {
+
+    const fetchTableByData = async () => {
+
+        if(!docData) return null;
+
+        const currentDateTimestamp = Timestamp.fromDate(new Date())
+        
+        if(currentDateTimestamp > docData.startDate && currentDateTimestamp < docData.endDate){
+            const url = docData.url;
+            const file = await URLtoFile(url);
+            const xlsTable = await FileToXLS(file);
+            
+            const filteredData = user.role == RoleTypes.user ? xlsTable.filter((number) => number["Öğrenci No"] == user.username) : xlsTable;
+
+            return filteredData;
+        }
+
+        return null;
+    }
+
+    fetchTableByData().then(response => {
+        
+        setIsTableLoading(false);
+        setTableData(response)
     })
     
   }, [user])
@@ -85,63 +105,63 @@ const ListDetail = () => {
         }); 
     }
 
-  return (
-    user.username
-    ?
-    <>
-    <br/><br/> 
-    <div className="relative overflow-x-auto">
-        {
-            isLoading ? "Loading..."
-            :
-            docData && docData.length
-         ?
-            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" className="px-6 py-3">
-                        Ad
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                        Soyad
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                        Sonuç
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    docData.map((row, index) => 
 
-                        <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                { row['Ad'] }
-                            </th>
-                            <td className="px-6 py-4">
-                                {  row['Soyad'] }
-                            </td>
-                            <td className="px-6 py-4">
-                                { row['Sonuç'] }
-                            </td>
-                        </tr>
-                    )
-                }
-            </tbody>
-        </table>
-       
-        :<>{Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Eşleşen Tarihte Veri Yok",
-            footer: "",
-          })}</>
-         
+    const LoadingSpinner = () => {
+        
+      return <div className="flex items-center justify-center min-h-screen scale-150">
+        <Spinner size="xl"/>
+      </div>
+    }
+    
+
+    return (
+        <>
+        {
+            isDocLoading ? <LoadingSpinner /> : 
+            user.username
+            ?
+                isTableLoading ? <LoadingSpinner /> :
+                docData && tableData &&
+                <div className="relative overflow-x-auto">
+                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" className="px-6 py-3">
+                                    Ad
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Soyad
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Sonuç
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                tableData.map((row, index) => 
+            
+                                    <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            { row['Ad'] }
+                                        </th>
+                                        <td className="px-6 py-4">
+                                            {  row['Soyad'] }
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            { row['Sonuç'] }
+                                        </td>
+                                    </tr>
+                                )
+                            }
+                        </tbody>
+                    </table>
+                </div>  
+            : 
+                docData && 
+                <UserLogin docTitle={docData.title} docDesc={docData.description}/>
         }
-    </div>   
-    </>
-    : 
-    <UserLogin/>
-  )
+        </>
+        )
 }
 export default ListDetail
