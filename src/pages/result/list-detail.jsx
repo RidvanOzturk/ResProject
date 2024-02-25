@@ -40,6 +40,8 @@ const ListDetail = () => {
     fetchDocById().then(response => {
         
          setIsDocLoading(false);
+         
+        console.log(response)
          setDocData(response)
     })
 
@@ -60,6 +62,9 @@ const ListDetail = () => {
 
             let filteredData = xlsTable;
 
+            console.log(user.role)
+            console.log(RoleTypes.user)
+            console.log(user.username)
             if (user.role == RoleTypes.user) {
 
                 filteredData =  xlsTable.filter((number) => number["Öğrenci No"] == user.username)
@@ -79,6 +84,7 @@ const ListDetail = () => {
     fetchTableByData().then(response => {
         
         setIsTableLoading(false);
+        console.log(response)
         setTableData(response)
     })
     
