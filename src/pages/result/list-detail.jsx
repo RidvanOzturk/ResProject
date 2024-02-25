@@ -57,8 +57,18 @@ const ListDetail = () => {
             const url = docData.url;
             const file = await URLtoFile(url);
             const xlsTable = await FileToXLS(file);
-            
-            const filteredData = user.role == RoleTypes.user ? xlsTable.filter((number) => number["Öğrenci No"] == user.username) : xlsTable;
+
+            let filteredData = xlsTable;
+
+            if (user.role == RoleTypes.user) {
+
+                filteredData =  xlsTable.filter((number) => number["Öğrenci No"] == user.username)
+                
+                if(docData.isSingle)
+                {
+                    filteredData = [filteredData[0]]
+                }
+            }
 
             return filteredData;
         }
@@ -72,7 +82,7 @@ const ListDetail = () => {
         setTableData(response)
     })
     
-  }, [user])
+  }, [docData, user])
 
 
     const URLtoFile = async url => {
