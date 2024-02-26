@@ -167,6 +167,8 @@ const ListDetail = () => {
                     </tr>
                   ))}
                 </tbody>
+               
+                
               </table>
             </div>
           )

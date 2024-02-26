@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
   QuerySnapshot,
   collection,
+  deleteDoc,
+  doc,
   getDocs,
   query,
   where,
@@ -10,13 +12,10 @@ import { firestore } from "../../firebase";
 import { useSelector } from "react-redux";
 import { Card } from "flowbite-react";
 import { RoleTypes } from "../../RoleTypes";
-import { Link, useLocation } from "react-router-dom";
-
-import { FaCopy } from "react-icons/fa";
-import AddFile from "./addFile";
+import { Link, useLocation} from "react-router-dom";
+import Swal from "sweetalert2";
 function List() {
   const location = useLocation();
-
   const [data, setData] = useState(null);
   const user = useSelector(({ UserSlice }) => UserSlice.user);
   const date = Date();
@@ -38,7 +37,32 @@ function List() {
     };
     fetchDocs();
   }, []);
-
+  
+  const deleteById = async (id) => {
+    const deleteVal = [...data];
+    console.log(id);
+    Swal.fire({
+      title: "Silmek istediğinize emin misiniz?",
+      text: "Bu işlemi geri alamazsın!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Evet"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteDoc(doc(firestore, "files", id));
+        deleteVal.splice(id,1)
+        setData(deleteVal)
+        Swal.fire({
+          title: "Silindi!",
+          text: "Dosyanız Silindi.",
+          icon: "success"
+        });
+      }
+    });
+   
+  };
   const handleCopy = async (copyText) => {
     try {
       await navigator.clipboard.writeText(copyText);
@@ -58,7 +82,7 @@ function List() {
         </h5>
         <p className=" underline font-normal text-gray-700 dark:text-gray-400">
           {data &&
-            data.map((value) => (
+            data.map((value,key) => (
               <>
                 <Link to={value.id}>{value.data().title}</Link>
                 <button
@@ -78,7 +102,9 @@ function List() {
                     Düzenle
                   </button>
                 </Link>
-
+                <button onClick={() =>
+                    deleteById(value.id)
+                  } type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 ">Dosya Sil</button>
                 <br />
               </>
             ))}
