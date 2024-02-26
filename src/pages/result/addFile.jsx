@@ -31,7 +31,7 @@ function AddFile() {
   const [isLoading, setIsLoading] = useState(true);
 
   const user = useSelector(({ UserSlice }) => UserSlice.user);
-  const allowedTypes = ["xlsx","xlsm","xlsb","xltx"];
+  const allowedTypes = ["xlsx", "xlsm", "xlsb", "xltx"];
   const [uploadIsStarted, setUploadIsStarted] = useState(false);
 
   const [progress, setProgress] = useState(0);
@@ -65,7 +65,6 @@ function AddFile() {
     if (allowedExtension.includes(fileExtension)) {
       console.log(file);
       setFile(file);
-
     } else {
       Swal.fire({
         icon: "error",
@@ -109,7 +108,7 @@ function AddFile() {
     });
   }, []);
 
-  const handleFormSubmit = async() => {
+  const handleFormSubmit = async () => {
     if (title === null || file === null) {
       Swal.fire({
         icon: "error",
@@ -117,30 +116,26 @@ function AddFile() {
         text: "Lütfen tüm boşlukları doldurunuz.",
         footer: "Alanları eksiksiz doldurunuz.",
       });
-      
+
       return;
     }
-    
 
+    console.log(file.type);
 
-
-    
-console.log(file.type)
-    
     setUploadIsStarted(true);
 
-    const uploadedFileUrl = ('File' in window && file instanceof File) ? await uploadFileToStorage(file) : file;
-    console.log(uploadedFileUrl)
+    const uploadedFileUrl =
+      "File" in window && file instanceof File
+        ? await uploadFileToStorage(file)
+        : file;
+    console.log(uploadedFileUrl);
     await uploadDocToFirebase(uploadedFileUrl);
-
 
     setUploadIsStarted(false);
   };
 
   const uploadFileToStorage = async (file) => {
-
     return new Promise((resolve, reject) => {
-
       // Firebase Storage
       const storageRef = ref(storage, `files/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file, file.type);
@@ -194,7 +189,6 @@ console.log(file.type)
   };
 
   const uploadDocToFirebase = async (uploadedFileUrl) => {
-
     try {
       const data = {
         owner: user.username,
@@ -206,18 +200,20 @@ console.log(file.type)
         endDate,
         createdAt: serverTimestamp(),
       };
-      console.log(data)
-      const docRef = id ? await setDoc(doc(firestore, "files", id), data) : await addDoc(collection(firestore, "files"), data);
-      console.log(docRef)
+      console.log(data);
+      const docRef = id
+        ? await setDoc(doc(firestore, "files", id), data)
+        : await addDoc(collection(firestore, "files"), data);
+      console.log(docRef);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-  }
+  };
 
-  useEffect(()=>{
-    console.log(file)
-    console.log(('File' in window && file instanceof File))
-  }, [file])
+  useEffect(() => {
+    console.log(file);
+    console.log("File" in window && file instanceof File);
+  }, [file]);
 
   return uploadIsStarted ? (
     <div className="py-10">
@@ -367,12 +363,18 @@ console.log(file.type)
                         </>
                       ) : (
                         <>
-                          <span className="font-semibold">Yüklemek İçin Tıklayınız</span>{" "}
+                          <span className="font-semibold">
+                            Yüklemek İçin Tıklayınız
+                          </span>{" "}
                         </>
                       )}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {file === null ? <>İzin verilen formatlar: .xlsx, .xls</> : file.name}
+                      {file === null ? (
+                        <>İzin verilen formatlar: .xlsx, .xls</>
+                      ) : (
+                        file.name
+                      )}
                     </p>
                   </div>
                   <input
@@ -391,13 +393,13 @@ console.log(file.type)
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
-      <button
-            type="button"
-            onClick={handleFormSubmit}
-            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            {id ? "Güncelle" : "Kaydet"}
-          </button>
+        <button
+          type="button"
+          onClick={handleFormSubmit}
+          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          {id ? "Güncelle" : "Kaydet"}
+        </button>
       </div>
     </form>
   );

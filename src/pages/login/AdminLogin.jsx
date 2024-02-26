@@ -2,23 +2,19 @@ import React, { useState } from "react";
 
 import useAuthentication from "../../hooks/useAuthentication";
 
-import { NavLink, useNavigate } from "react-router-dom";
 
 function AdminLogin() {
-  
-  const navigate = useNavigate();
 
-  const {isLoading, message, adminLoginCall} = useAuthentication();
+  const { isLoading, message, adminLoginCall } = useAuthentication();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    await adminLoginCall({username, password})
+
+    await adminLoginCall({ username, password });
   };
-    
 
   return (
     <div className="app">
@@ -28,11 +24,23 @@ function AdminLogin() {
           <form onSubmit={handleSubmit}>
             <div className="input-container">
               <label>Username </label>
-              <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+              <input
+                type="text"
+                name="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
             </div>
             <div className="input-container">
               <label>Password </label>
-              <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <input
+                type="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </div>
             <div className="button-container">
               <input type="submit" value="Enter" />
