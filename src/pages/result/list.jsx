@@ -19,28 +19,32 @@ function List() {
   const [data, setData] = useState(null);
   const user = useSelector(({ UserSlice }) => UserSlice.user);
   const date = Date();
+  
   useEffect(() => {
+
     const fetchDocs = async () => {
       if (user.role !== RoleTypes.admin) {
         return;
       }
-
+  
       const querySnapshot = query(
         collection(firestore, "files"),
         where("owner", "==", user.username)
       );
-
+  
       const querySnapshotResult = await getDocs(querySnapshot);
-
+  
       console.log(querySnapshotResult.docs[0]);
       setData(querySnapshotResult.docs);
     };
+
     fetchDocs();
   }, []);
   
   const deleteById = async (id) => {
-    const deleteVal = [...data];
+
     console.log(id);
+    
     Swal.fire({
       title: "Silmek istediğinize emin misiniz?",
       text: "Bu işlemi geri alamazsın!",
@@ -51,14 +55,11 @@ function List() {
       confirmButtonText: "Evet"
     }).then((result) => {
       if (result.isConfirmed) {
+
         deleteDoc(doc(firestore, "files", id));
-        deleteVal.splice(id,1)
-        setData(deleteVal)
-        Swal.fire({
-          title: "Silindi!",
-          text: "Dosyanız Silindi.",
-          icon: "success"
-        });
+      
+        const result = data.filter(i => i.id !== id)
+        setData(result)
       }
     });
    

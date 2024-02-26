@@ -14,6 +14,8 @@ import { RoleTypes } from "../../RoleTypes";
 import { useSelector } from "react-redux";
 import UserLogin from "../login/UserLogin";
 import { Spinner } from "flowbite-react";
+import Swal from "sweetalert2";
+
 
 const ListDetail = () => {
   const { id } = useParams();
@@ -78,9 +80,17 @@ const ListDetail = () => {
         }
 
         return filteredData;
-      }
-
+      } //// Bakılacak
+      /*else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Hata!",
+          footer: 'Eşleşen tarihlerde veri olmayabilir.'
+        });
       return null;
+        
+      }*/
     };
 
     fetchTableByData().then((response) => {
@@ -167,8 +177,6 @@ const ListDetail = () => {
                     </tr>
                   ))}
                 </tbody>
-               
-                
               </table>
             </div>
           )
