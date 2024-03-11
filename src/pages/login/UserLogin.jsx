@@ -1,47 +1,42 @@
 import React, { useState } from "react";
 
 import useAuthentication from "../../hooks/useAuthentication";
-import { NavLink, useNavigate } from "react-router-dom";
+import LoginLayout from "../../components/LoginLayout";
 
 function UserLogin({ docTitle, docDesc }) {
-  const navigate = useNavigate();
+
   const { isLoading, message, userLoginCall } = useAuthentication();
 
   const [username, setUsername] = useState("");
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const [isChecked, setIsChecked] = useState(false)
 
+  const handleSubmit = async () => {
+    console.log(username)
     await userLoginCall({ username });
   };
 
   return (
-    <div className="app">
-      <div className="login-form">
-        <div className="title">
-          <div>{docTitle}</div>
-        </div>
-        <div className="desc">
-          <div>{docDesc}</div>
-        </div>
-        <div className="form">
-          <form onSubmit={handleSubmit}>
-            <div className="input-container">
-              <label className="text-lg">Öğrenci No Giriniz </label>
-              <input
-                type="text"
-                name="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-            <div className="button-container">
-              <input type="submit" value="Enter" />
-            </div>
-          </form>
-        </div>
+    <LoginLayout>
+       <div className='p-4 w-full md:w-1/2 md:p-0 flex flex-col gap-y-8'>
+          <div className='flex flex-col gap-y-2'>
+              <div className='font-bold text-3xl'>{docTitle}</div>
+              <div className='font-semibold text-md text-slate-600'>{docDesc}</div>
+          </div>
+
+          <div className='flex flex-col gap-y-1'>
+              <label htmlFor='ogrenci-no' className='text-lg'>Öğrenci Numaranız:</label>
+              <input type='text' id='ogrenci-no' value={username} onChange={e => setUsername(e.target.value)} placeholder='Öğrenci Numaranız...' className='rounded p-5 shadow drop-shadow'/>
+          </div> 
+
+          <div className='flex justify-between'>
+              <div className="flex items-center">   
+                <input id='kvkk' type='checkbox' value={isChecked} onChange={() => setIsChecked(!isChecked)} className='p-2 rounded drop-shadow shadow mr-2'/>
+                <label htmlFor='kvkk' className='text-lg underline'><a href="https://www.google.com" target='_blank'>KVKK Onaylıyorum</a></label>
+              </div>
+              <button type="button" onClick={handleSubmit} disabled={!isChecked || !username} className='text-white bg-slate-700 text-xl px-4 py-2 rounded disabled:bg-slate-400'>Giriş Yap</button>
+          </div>
       </div>
-    </div>
+    </LoginLayout>
   );
 }
 

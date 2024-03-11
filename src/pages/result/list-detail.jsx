@@ -70,9 +70,7 @@ const ListDetail = () => {
         console.log(RoleTypes.user);
         console.log(user.username);
         if (user.role == RoleTypes.user) {
-          filteredData = xlsTable.filter(
-            (number) => number["Öğrenci No"] == user.username
-          );
+          filteredData = xlsTable.filter((number) => number["Öğrenci No"] == user.username);
 
           if (docData.isSingle) {
             filteredData = [filteredData[0]];

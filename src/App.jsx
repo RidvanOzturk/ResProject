@@ -37,31 +37,25 @@ function App() {
   return (
     <Provider store={store}>
         <PersistGate persistor={persistor}>
-
           <Router>
               <Header/>
-
-              <Routes>
-                  <Route path='/login' element={  <LoginLayout/>}/>
-              </Routes>
-
-              <Layout>
                 <Routes>
-                  <Route path="/" element={<AdminGuard><AddFile /></AdminGuard>} />
-                  <Route path="/addfile" element={<AdminGuard><AddFile /></AdminGuard>} />
-                  <Route path="/addfile/:id" element={<AdminGuard><AddFile /></AdminGuard>} />
-                  
+
                   <Route path="/panel-login" element={<GuestGuard><AdminLogin /></GuestGuard>} />
-                  <Route path="/result" element={<AdminGuard><AddFile /></AdminGuard>} />
 
-                  <Route path='/list' element={<AdminGuard><List /></AdminGuard>} />
-                  <Route path='/list/:id' element={<ListDetail />} />
+                  <Route element={<Layout />} >
+                    <Route path="/" element={<AdminGuard><AddFile /></AdminGuard>} />
+                    <Route path="/addfile" element={<AdminGuard><AddFile /></AdminGuard>} />
+                    <Route path="/addfile/:id" element={<AdminGuard><AddFile /></AdminGuard>} />
+                    
+                    <Route path="/result" element={<AdminGuard><AddFile /></AdminGuard>} />
+
+                    <Route path='/list' element={<AdminGuard><List /></AdminGuard>} />
+                    <Route path='/list/:id' element={<ListDetail />} />
+                  </Route>
                 </Routes>
-              </Layout>
-
               <Footer/>
           </Router>
-    
       </PersistGate>
     </Provider>
   )

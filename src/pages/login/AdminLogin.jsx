@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import useAuthentication from "../../hooks/useAuthentication";
-
+import LoginLayout from "../../components/LoginLayout";
 
 function AdminLogin() {
 
@@ -17,39 +17,29 @@ function AdminLogin() {
   };
 
   return (
-    <div className="app">
-      <div className="login-form">
-        <div className="title">Admin Log In</div>
-        <div className="form">
-          <form onSubmit={handleSubmit}>
-            <div className="input-container">
-              <label>Username </label>
-              <input
-                type="text"
-                name="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
+    <LoginLayout>
+        <div className='p-4 w-full md:w-1/2 md:p-0 flex flex-col gap-y-8'>
+                <div className='flex flex-col gap-y-2'>
+                    <div className='font-bold text-3xl'>Giriş Yap</div>
+                    <div className='font-semibold text-md text-slate-600'>Aşağıdaki bilgileri doldurarak giriş yapabilirsiniz.</div>
+                </div>
+                    
+                <div className='flex flex-col gap-y-4'>
+                    <div className='flex flex-col gap-y-1'>
+                        <label htmlFor='username' className='text-lg'>Username:</label>
+                        <input type='text' id='username' value={username} onChange={e => setUsername(e.target.value)} placeholder='Username...' className='rounded p-5 shadow drop-shadow'/>
+                    </div>
+                    <div className='flex flex-col gap-y-1'>
+                        <label htmlFor='password' className='text-lg'>Şifre:</label>
+                        <input type='text' id='password' value={password} onChange={e => setPassword(e.target.value)} placeholder='Şifreniz...' className='rounded p-5 shadow drop-shadow'/>
+                    </div> 
+                </div>
+
+                <div className='flex justify-end'>
+                    <button type="button" onClick={handleSubmit} disabled={!username || !password} className='text-white bg-slate-700 text-xl px-4 py-2 rounded disabled:bg-slate-400'>Giriş Yap</button>
+                </div>
             </div>
-            <div className="input-container">
-              <label>Password </label>
-              <input
-                type="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div className="button-container">
-              <input type="submit" value="Enter" />
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  
+    </LoginLayout>  
   );
 }
 

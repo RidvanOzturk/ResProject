@@ -10,7 +10,7 @@ const GuestGuard = ({children}) => {
         return <Navigate to="/" />
     }
 
-    return <div>{children}</div>;
+    return <>{children}</>;
 };
 
 export default GuestGuard;
