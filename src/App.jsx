@@ -20,6 +20,7 @@ import {
 
 import Header from './components/Header';
 import Layout from './components/Layout';
+import LoginLayout from './components/LoginLayout';
 
   import UserLogin from "./pages/login/UserLogin"
   import AdminLogin from "./pages/login/AdminLogin"
@@ -39,10 +40,14 @@ function App() {
 
           <Router>
               <Header/>
+
+              <Routes>
+                  <Route path='/login' element={  <LoginLayout/>}/>
+              </Routes>
+
               <Layout>
                 <Routes>
                   <Route path="/" element={<AdminGuard><AddFile /></AdminGuard>} />
-
                   <Route path="/addfile" element={<AdminGuard><AddFile /></AdminGuard>} />
                   <Route path="/addfile/:id" element={<AdminGuard><AddFile /></AdminGuard>} />
                   
@@ -51,7 +56,6 @@ function App() {
 
                   <Route path='/list' element={<AdminGuard><List /></AdminGuard>} />
                   <Route path='/list/:id' element={<ListDetail />} />
-
                 </Routes>
               </Layout>
 

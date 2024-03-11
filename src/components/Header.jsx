@@ -1,11 +1,14 @@
 import { useSelector } from "react-redux";
 import useAuthentication from "../hooks/useAuthentication";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { RoleTypes } from "../RoleTypes";
 import logo from "../assets/uu_logo.png";
 
 const Header = () => {
-  const navigate = useNavigate();
+
+  const location = useLocation()
+  if(location.pathname.includes("login"))
+    return
 
   const user = useSelector(({ UserSlice }) => UserSlice.user);
 

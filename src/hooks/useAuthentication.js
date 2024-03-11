@@ -14,7 +14,6 @@ const useAuthentication = () => {
     const userLoginCall = async({username}) => {
 
         setIsLoading(true)
-
         try {
 
             /*
