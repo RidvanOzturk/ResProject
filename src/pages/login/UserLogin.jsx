@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import useAuthentication from "../../hooks/useAuthentication";
 import LoginLayout from "../../components/LoginLayout";
 
-function UserLogin({ docTitle, docDesc }) {
+function UserLogin({ docTitle, docDesc, docStartDate, docEndDate}) {
 
   const { isLoading, message, userLoginCall } = useAuthentication();
 
@@ -21,6 +21,7 @@ function UserLogin({ docTitle, docDesc }) {
           <div className='flex flex-col gap-y-2'>
               <div className='font-bold text-3xl'>{docTitle}</div>
               <div className='font-semibold text-md text-slate-600'>{docDesc}</div>
+              <div className='font-semibold text-md text-slate-600'>{docStartDate} {docEndDate}</div>
           </div>
 
           <div className='flex flex-col gap-y-1'>
@@ -31,7 +32,7 @@ function UserLogin({ docTitle, docDesc }) {
           <div className='flex justify-between'>
               <div className="flex items-center">   
                 <input id='kvkk' type='checkbox' value={isChecked} onChange={() => setIsChecked(!isChecked)} className='p-2 rounded drop-shadow shadow mr-2'/>
-                <label htmlFor='kvkk' className='text-lg underline'><a href="https://www.google.com" target='_blank'>KVKK Onaylıyorum</a></label>
+                <label htmlFor='kvkk' className='text-lg underline'><a href="https://uskudar.edu.tr/tr/kisisel-verilerin-korunmasi" target='_blank'>KVKK Onaylıyorum</a></label>
               </div>
               <button type="button" onClick={handleSubmit} disabled={!isChecked || !username} className='text-white bg-slate-700 text-xl px-4 py-2 rounded disabled:bg-slate-400'>Giriş Yap</button>
           </div>

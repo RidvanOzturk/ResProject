@@ -11,6 +11,9 @@ const LoginLayout = ({children}) => {
               <img src={logo} width="100" height="100" className="absolute mt-6 ml-12 z-20" />
               <div className='absolute w-full h-full bg-gradient-to-r from-cyan-800'></div>
               <img src={loginImg} className='h-full w-auto object-cover object-right-bottom'/>
+              <div className="absolute inset-0 flex items-center justify-start ml-12">
+        <h2 className="text-gray-50 text-2xl font-thin">Sorgu İşlemleri Ekranına Hoşgeldiniz</h2>
+    </div>
           </div>
           <div className='basis-7/12 flex items-center justify-center'>
               {children}

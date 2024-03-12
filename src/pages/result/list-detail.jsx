@@ -14,6 +14,7 @@ import { RoleTypes } from "../../RoleTypes";
 import { useSelector } from "react-redux";
 import UserLogin from "../login/UserLogin";
 import { Spinner } from "flowbite-react";
+import { format } from 'date-fns';
 import Swal from "sweetalert2";
 
 
@@ -44,17 +45,23 @@ const ListDetail = () => {
 
     fetchDocById().then((response) => {
       setIsDocLoading(false);
-
       console.log(response);
       setDocData(response);
+      
+      
+
     });
   }, []);
-
   useEffect(() => {
     const fetchTableByData = async () => {
       if (!docData) return null;
 
       const currentDateTimestamp = Timestamp.fromDate(new Date());
+      // const test = Math.round(docData.startDate / 1000)
+      // console.log(test.toLocaleString);
+      // const normalDate = new Date(docData.startDate * 1000);
+      // console.log(normalDate);
+      // console.log(docData.startDate);
 
       if (
         currentDateTimestamp > docData.startDate &&
@@ -181,7 +188,7 @@ const ListDetail = () => {
         )
       ) : (
         docData && (
-          <UserLogin docTitle={docData.title} docDesc={docData.description} />
+          <UserLogin docTitle={docData.title} docDesc={docData.description} docStartDate={"docData.startDate"} docEndDate={"asda"}/>
         )
       )}
     </>

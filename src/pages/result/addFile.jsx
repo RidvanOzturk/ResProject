@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Swal from "sweetalert2";
-import fileTypeChecker from "file-type-checker";
 import { storage, firestore } from "../../firebase";
 import {
   getDownloadURL,
