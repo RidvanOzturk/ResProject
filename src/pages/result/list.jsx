@@ -81,35 +81,22 @@ function List() {
         <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           <h3 className="text-center text-2xl font-bold">Yüklenen Dosyalar</h3>
         </h5>
-        <p className=" underline font-normal text-gray-700 dark:text-gray-400">
+        <div className="mt-4">
           {data &&
             data.map((value,key) => (
-              <>
-                <Link to={value.id}>{value.data().title}</Link>
-                <button
-                  onClick={() =>
-                    handleCopy(window.location.href + "/" + value.id)
-                  }
-                  type="button"
-                  className="ml-3 focus:outline-none text-white bg-cyan-400 hover:bg-cyan-700 focus:ring-4 focus:ring-green-300 font-medium rounded-xl text-sm px-5 py-2.5 me-2 mb-2 "
-                >
+              <div className="grid grid-cols-5 gap-x-2 pt-5 items-center hover:border hover:rounded-xl hover:shadow-lg">
+                <Link className="col-span-2 text-lg font-semibold text-center underline" to={value.id}>{value.data().title}</Link>
+                <button className="focus:outline-none text-white bg-cyan-400 hover:bg-cyan-700 focus:ring-4 focus:ring-green-300 font-medium rounded-xl text-sm px-5 py-2.5" onClick={() => handleCopy(window.location.href + "/" + value.id) } type="button">
                   Kopyala
                 </button>
-                <Link to={`/addFile/${value.id}`}>
-                  <button
-                    type="button"
-                    className="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
-                  >
-                    Düzenle
-                  </button>
+                <Link className="flex justify-center items-center focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5" to={`/addFile/${value.id}`}>
+                  Düzenle
                 </Link>
-                <button onClick={() =>
-                    deleteById(value.id)
-                  } type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 ">Dosya Sil</button>
+                <button className="mr-4 focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5" onClick={() => deleteById(value.id) } type="button">Dosya Sil</button>
                 <br />
-              </>
+              </div>
             ))}
-        </p>
+        </div>
         <p className="text-center font-bold">
           Toplam dosya sayısı
           <h1>{data && data.length}</h1>

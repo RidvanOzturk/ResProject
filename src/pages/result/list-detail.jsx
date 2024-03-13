@@ -28,6 +28,8 @@ const ListDetail = () => {
   const [docData, setDocData] = useState(null);
   const [tableData, setTableData] = useState(null);
 
+  const [isDocAccessible, setIsDocAccessible] = useState(false)
+
   useEffect(() => {
     const fetchDocById = async () => {
       const idQuery = where(documentId(), "==", id);
@@ -59,6 +61,9 @@ const ListDetail = () => {
         currentDateTimestamp > docData.startDate &&
         currentDateTimestamp < docData.endDate
       ) {
+        
+        setIsDocAccessible(true)
+
         const url = docData.url;
         const file = await URLtoFile(url);
         const xlsTable = await FileToXLS(file);
@@ -131,7 +136,7 @@ const ListDetail = () => {
           <LoadingSpinner />
         ) : (
           docData &&
-          tableData && (
+          tableData && tableData.length ? (
             <div className="relative overflow-x-auto">
               <table className="w-full text-sm mt-7 text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -167,10 +172,18 @@ const ListDetail = () => {
               </table>
             </div>
           )
+          :
+          "boş knk"
         )
       ) : (
         docData && (
-          <UserLogin docTitle={docData.title} docDesc={docData.description} docStartDate={docData.startDate.toDate().toLocaleDateString('en-GB')} docEndDate={docData.endDate.toDate().toLocaleDateString('en-GB')}/>
+          <UserLogin 
+            isDocAccessible={isDocAccessible}
+            docTitle={docData.title} 
+            docDesc={docData.description} 
+            docStartDate={docData.startDate.toDate().toLocaleDateString('en-GB')} 
+            docEndDate={docData.endDate.toDate().toLocaleDateString('en-GB')}
+          />
         )
       )}
     </>
