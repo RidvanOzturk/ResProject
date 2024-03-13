@@ -29,6 +29,7 @@ import Footer from './components/Footer';
 import List from './pages/result/list';
 import ListDetail from './pages/result/list-detail';
 import AddFile from './pages/result/addFile';
+import NotFound from './components/404';
 
 function App() {
   
@@ -53,6 +54,8 @@ function App() {
                     <Route path='/list' element={<AdminGuard><List /></AdminGuard>} />
                     <Route path='/list/:id' element={<ListDetail />} />
                   </Route>
+
+                  <Route path='*' element={<NotFound/>}/>
                 </Routes>
               <Footer/>
           </Router>
