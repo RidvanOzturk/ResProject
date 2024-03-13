@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import useAuthentication from "../../hooks/useAuthentication";
 import LoginLayout from "../../components/LoginLayout";
+import Swal from "sweetalert2";
 
 function UserLogin({ docTitle, docDesc, docStartDate, docEndDate}) {
 
@@ -11,8 +12,22 @@ function UserLogin({ docTitle, docDesc, docStartDate, docEndDate}) {
   const [isChecked, setIsChecked] = useState(false)
 
   const handleSubmit = async () => {
+    let currDate = new Date();
     console.log(username)
-    await userLoginCall({ username });
+    console.log(currDate.toLocaleDateString('en-GB'))
+    if (currDate >= docStartDate && currDate <= docEndDate) {
+      await userLoginCall({ username });
+    }
+    else
+    {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Eşleşen Tarihlerde Veri Olmayabilir.",
+        footer: 'Danışman hocanızla iletişime geçebilirsiniz.'
+      });
+      return null;
+    }
   };
 
   return (
@@ -21,7 +36,7 @@ function UserLogin({ docTitle, docDesc, docStartDate, docEndDate}) {
           <div className='flex flex-col gap-y-2'>
               <div className='font-bold text-3xl'>{docTitle}</div>
               <div className='font-semibold text-md text-slate-600'>{docDesc}</div>
-              <div className='font-semibold text-md text-slate-600'>{docStartDate} {docEndDate}</div>
+              <div className='font-semibold text-md text-slate-600'>Bu dosya <u>{docStartDate}</u> ile <u>{docEndDate}</u> tarihleri arasında görüntülenebilir.</div>
           </div>
 
           <div className='flex flex-col gap-y-1'>

@@ -47,9 +47,6 @@ const ListDetail = () => {
       setIsDocLoading(false);
       console.log(response);
       setDocData(response);
-      
-      
-
     });
   }, []);
   useEffect(() => {
@@ -57,11 +54,6 @@ const ListDetail = () => {
       if (!docData) return null;
 
       const currentDateTimestamp = Timestamp.fromDate(new Date());
-      // const test = Math.round(docData.startDate / 1000)
-      // console.log(test.toLocaleString);
-      // const normalDate = new Date(docData.startDate * 1000);
-      // console.log(normalDate);
-      // console.log(docData.startDate);
 
       if (
         currentDateTimestamp > docData.startDate &&
@@ -85,17 +77,7 @@ const ListDetail = () => {
         }
 
         return filteredData;
-      } //// Bakılacak
-      /*else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Hata!",
-          footer: 'Eşleşen tarihlerde veri olmayabilir.'
-        });
-      return null;
-        
-      }*/
+      } 
     };
 
     fetchTableByData().then((response) => {
@@ -188,7 +170,7 @@ const ListDetail = () => {
         )
       ) : (
         docData && (
-          <UserLogin docTitle={docData.title} docDesc={docData.description} docStartDate={"docData.startDate"} docEndDate={"asda"}/>
+          <UserLogin docTitle={docData.title} docDesc={docData.description} docStartDate={docData.startDate.toDate().toLocaleDateString('en-GB')} docEndDate={docData.endDate.toDate().toLocaleDateString('en-GB')}/>
         )
       )}
     </>
