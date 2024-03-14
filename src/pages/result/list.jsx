@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  QuerySnapshot,
   collection,
   deleteDoc,
   doc,
@@ -14,14 +13,19 @@ import { Card } from "flowbite-react";
 import { Button, IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { RoleTypes } from "../../RoleTypes";
-import { Link, useLocation} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 function List() {
-  const location = useLocation();
-  const [data, setData] = useState(null);
+
+  const itemsPerPage = 5
+
   const user = useSelector(({ UserSlice }) => UserSlice.user);
-  const date = Date();
-  
+
+  const [allData, setAllData] = useState(null);
+  const [activeData, setActiveData] = useState(null)
+  const [pageCount, setPageCount] = useState(0)
+  const [activePage, setActivePage] = useState(1);
+
   useEffect(() => {
 
     const fetchDocs = async () => {
@@ -31,17 +35,32 @@ function List() {
   
       const querySnapshot = query(
         collection(firestore, "files"),
-        where("owner", "==", user.username)
+        where("owner", "==", user.username),
       );
   
       const querySnapshotResult = await getDocs(querySnapshot);
   
-      console.log(querySnapshotResult.docs[0]);
-      setData(querySnapshotResult.docs);
+      setAllData(querySnapshotResult.docs);
+
+      setActiveData(querySnapshotResult.docs.slice(0, itemsPerPage))
+
+      setPageCount(Math.ceil(querySnapshotResult.docs.length / itemsPerPage))
     };
 
     fetchDocs();
   }, []);
+
+  useEffect(() => {
+    if(!allData)
+      return
+
+    const startIndex = (itemsPerPage*(activePage-1))
+    const endIndex = startIndex + itemsPerPage
+
+    setActiveData(allData.slice(startIndex, endIndex))
+    
+  }, [activePage]);
+
   
   const deleteById = async (id) => {
 
@@ -58,10 +77,18 @@ function List() {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        deleteDoc(doc(firestore, "files", id));
+        deleteDoc(doc(firestore, "files", id))
+
+        
+        const result = allData.filter(i => i.id !== id)
       
-        const result = data.filter(i => i.id !== id)
-        setData(result)
+        setAllData(result)
+
+        const startIndex = (itemsPerPage*(activePage-1))
+        const endIndex = startIndex + itemsPerPage
+        setActiveData(result.slice(startIndex, endIndex))
+        
+        setPageCount(Math.ceil(result.length / itemsPerPage))
       }
     });
    
@@ -74,25 +101,23 @@ function List() {
       console.log('Error copying to clipboard:', error);
     }
   };
-  const [active, setActive] = useState(1);
  
-  const getItemProps = (index) =>
-    ({
-      variant: active === index ? "filled" : "text",
+  const getItemProps = (index) => ({
+      variant: activePage === index ? "filled" : "text",
       color: "gray",
-      onClick: () => setActive(index),
-    });
+      onClick: () => setActivePage(index),
+  });
  
-  const next = () => {
-    if (active === 5) return;
+  const handleNext = () => {
+    if (activePage === pageCount) return;
  
-    setActive(active + 1);
+    setActivePage(activePage + 1);
   };
  
-  const prev = () => {
-    if (active === 1) return;
+  const handlePrev = () => {
+    if (activePage === 1) return;
  
-    setActive(active - 1);
+    setActivePage(activePage - 1);
   };
   return (
     <>
@@ -103,9 +128,9 @@ function List() {
           <h3 className="text-center text-2xl font-bold">Yüklenen Dosyalar</h3>
         </h5>
         <div className="mt-4">
-          {data &&
-            data.map((value,key) => (
-              <div className="grid grid-cols-5 gap-x-2 pt-5 items-center hover:border hover:rounded-xl hover:shadow-lg">
+          {activeData &&
+            activeData.map((value,key) => (
+              <div key={key} className="grid grid-cols-5 gap-x-2 pt-5 items-center hover:border hover:rounded-xl hover:shadow-lg">
                 <Link className="col-span-2 text-lg font-semibold text-center underline" to={value.id}>{value.data().title}</Link>
                 <button className="focus:outline-none text-white bg-cyan-400 hover:bg-cyan-700 focus:ring-4 focus:ring-green-300 font-medium rounded-xl text-sm px-5 py-2.5" onClick={() => handleCopy(window.location.href + "/" + value.id) } type="button">
                   Kopyala
@@ -120,29 +145,28 @@ function List() {
         </div>
         <p className="text-center font-bold">
           Toplam dosya sayısı
-          <h1>{data && data.length}</h1>
+          <h1>{allData && allData.length}</h1>
         </p>
         <div className="flex items-center justify-center gap-4">
       <Button
         variant="text"
         className="flex items-center gap-2"
-        onClick={prev}
-        disabled={active === 1}
+        onClick={handlePrev}
+        disabled={activePage === 1}
       >
         <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
       </Button>
       <div className="flex items-center gap-2">
-        <IconButton {...getItemProps(1)}>1</IconButton>
-        <IconButton {...getItemProps(2)}>2</IconButton>
-        <IconButton {...getItemProps(3)}>3</IconButton>
-        <IconButton {...getItemProps(4)}>4</IconButton>
-        <IconButton {...getItemProps(5)}>5</IconButton>
+        {
+          pageCount && new Array(pageCount).fill(0).map((_, index) => 
+            <IconButton key={index} {...getItemProps(index+1)}>{index+1}</IconButton>)
+        }
       </div>
       <Button
         variant="text"
         className="flex items-center gap-2"
-        onClick={next}
-        disabled={active === 5}
+        onClick={handleNext}
+        disabled={activePage === pageCount}
       >
         Next
         <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />

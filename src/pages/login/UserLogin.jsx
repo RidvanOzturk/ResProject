@@ -4,20 +4,16 @@ import useAuthentication from "../../hooks/useAuthentication";
 import LoginLayout from "../../components/LoginLayout";
 import Swal from "sweetalert2";
 
-function UserLogin({ isDocAccessible, docTitle, docDesc, docStartDate, docEndDate}) {
+function UserLogin({ handleLoginCall, isDocAccessible, docTitle, docDesc, docStartDate, docEndDate}) {
 
   const { isLoading, message, userLoginCall } = useAuthentication();
 
   const [username, setUsername] = useState("");
   const [isChecked, setIsChecked] = useState(false)
-
-  console.log(isDocAccessible);
   
   const handleSubmit = async () => {
-    let currDate = new Date();
 
-    console.log(username)
-    console.log(currDate.toLocaleDateString('en-GB'))
+    handleLoginCall()
 
     if (isDocAccessible) {
       await userLoginCall({ username });

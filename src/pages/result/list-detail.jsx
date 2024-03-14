@@ -9,16 +9,18 @@ import {
 import { firestore } from "../../firebase";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import * as XLSX from "xlsx";
 import { RoleTypes } from "../../RoleTypes";
 import { useSelector } from "react-redux";
 import UserLogin from "../login/UserLogin";
-import { Spinner } from "flowbite-react";
-import { format } from 'date-fns';
+import ListTable from "../../components/ListTable";
+import NotFound from "../../components/404";
+import LoadingSpinner from "../../components/general/LoadingSpinner";
 import Swal from "sweetalert2";
 
+import useGenerateTable from "../../hooks/useGenerateTable";
 
 const ListDetail = () => {
+
   const { id } = useParams();
   const user = useSelector(({ UserSlice }) => UserSlice.user);
 
@@ -27,8 +29,13 @@ const ListDetail = () => {
 
   const [docData, setDocData] = useState(null);
   const [tableData, setTableData] = useState(null);
+  const [isDatePassed, setIsDatePassed] = useState(true);
 
   const [isDocAccessible, setIsDocAccessible] = useState(false)
+
+  const [isLoginCall, setIsLoginCall] = useState(false)
+
+  const {GenerateTable} = useGenerateTable()
 
   useEffect(() => {
     const fetchDocById = async () => {
@@ -51,143 +58,120 @@ const ListDetail = () => {
       setDocData(response);
     });
   }, []);
+
   useEffect(() => {
+
     const fetchTableByData = async () => {
       if (!docData) return null;
 
       const currentDateTimestamp = Timestamp.fromDate(new Date());
 
+      if(currentDateTimestamp > docData.startDate && currentDateTimestamp < docData.endDate){
+        setIsDatePassed(false)
+      }
+
       if (
-        currentDateTimestamp > docData.startDate &&
-        currentDateTimestamp < docData.endDate
+        (currentDateTimestamp > docData.startDate &&
+        currentDateTimestamp < docData.endDate) 
+        || 
+        user.role == RoleTypes.admin
       ) {
         
         setIsDocAccessible(true)
 
-        const url = docData.url;
-        const file = await URLtoFile(url);
-        const xlsTable = await FileToXLS(file);
+        let xlsTable = await GenerateTable(docData.url)
 
-        let filteredData = xlsTable;
-
-        console.log(user.role);
-        console.log(RoleTypes.user);
-        console.log(user.username);
-        if (user.role == RoleTypes.user) {
+        let filteredData;
+        if(user.role == RoleTypes.admin){
+          filteredData = xlsTable
+        }
+        else if (user.role == RoleTypes.user) {
           filteredData = xlsTable.filter((number) => number["Öğrenci No"] == user.username);
 
           if (docData.isSingle) {
             filteredData = [filteredData[0]];
           }
         }
+        console.log(filteredData)
 
         return filteredData;
-      } 
+      }
     };
 
+    setIsTableLoading(true)
     fetchTableByData().then((response) => {
       setIsTableLoading(false);
       console.log(response);
       setTableData(response);
+
+      if(isLoginCall && !response.length){
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Kayıtlı Veri Yok!",
+          footer: 'Girdiğiniz numaraya ait veri bulunamadı!'
+        });
+      }
     });
   }, [docData, user]);
 
-  const URLtoFile = async (url) => {
-    const res = await fetch(url);
-    const blob = await res.blob();
+  
+  const handleLoginCall = () => setIsLoginCall(true);
 
-    const mime = blob.type;
-    const ext = mime.slice(mime.lastIndexOf("/") + 1, mime.length);
+  if(isDocLoading)
+    return <LoadingSpinner />
 
-    const file = new File([blob], `filename.${ext}`, { type: mime });
-
-    return file;
-  };
-  const FileToXLS = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsBinaryString(file);
-      reader.onload = (e) => {
-        const data = e.target.result;
-        const workbook = XLSX.read(data, { type: "binary" });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const parsedData = XLSX.utils.sheet_to_json(sheet);
-
-        resolve(parsedData);
-      };
-    });
-  };
-
-  const LoadingSpinner = () => {
-    return (
-      <div className="flex items-center justify-center min-h-screen scale-150">
-        <Spinner size="xl" />
-      </div>
-    );
-  };
+  if(!docData)
+    return <NotFound />
 
   return (
-    <>
-      {isDocLoading ? (
-        <LoadingSpinner />
-      ) : user.username ? (
-        isTableLoading ? (
-          <LoadingSpinner />
-        ) : (
-          docData &&
-          tableData && tableData.length ?
-          /*user.role == RoleTypes.user*/  (
-            <div className="relative overflow-x-auto">
-              <table className="w-full text-sm mt-7 text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      Ad
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Soyad
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Sonuç
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tableData.map((row, index) => (
-                    <tr
-                      key={index}
-                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                    >
-                      <th
-                        scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        {row["Ad"]}
-                      </th>
-                      <td className="px-6 py-4">{row["Soyad"]}</td>
-                      <td className="px-6 py-4">{row["Sonuç"]}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )
-          :
-          "boş knk"
-        )
-      ) : (
-        docData && (
-          <UserLogin 
+      <>
+      {
+        user.role == RoleTypes.admin && isDatePassed && 
+        <div className="w-full text-center p-6 text-2xl font-bold">Tarihi Geçmiş Döküman!</div>
+      }
+      {
+        isTableLoading && <LoadingSpinner isTransparent={user.role != RoleTypes.admin}/>
+      }
+      {
+        user.username && tableData && tableData.length ?
+          <ListTable tableData={tableData} />
+        : 
+        <UserLogin 
+            handleLoginCall={handleLoginCall}
             isDocAccessible={isDocAccessible}
             docTitle={docData.title} 
             docDesc={docData.description} 
             docStartDate={docData.startDate.toDate().toLocaleDateString('en-GB')} 
             docEndDate={docData.endDate.toDate().toLocaleDateString('en-GB')}
           />
-        )
-      )}
+      }
+      </>
+  )
+
+  /*return (
+    <>
+      {
+      isDocLoading 
+        ? <LoadingSpinner /> 
+        : user.username 
+          ? (isTableLoading 
+            ? <LoadingSpinner /> 
+            : docData && tableData && tableData.length 
+              ? <ListTable tableData={tableData} />
+              : "boş knk")
+          :
+            docData && (
+              <UserLogin 
+                isDocAccessible={isDocAccessible}
+                docTitle={docData.title} 
+                docDesc={docData.description} 
+                docStartDate={docData.startDate.toDate().toLocaleDateString('en-GB')} 
+                docEndDate={docData.endDate.toDate().toLocaleDateString('en-GB')}
+              />
+            )
+      }
     </>
-  );
+  );*/
 };
 export default ListDetail;

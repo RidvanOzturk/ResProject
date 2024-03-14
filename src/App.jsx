@@ -28,7 +28,7 @@ import LoginLayout from './components/LoginLayout';
 import Footer from './components/Footer';
 import List from './pages/result/list';
 import ListDetail from './pages/result/list-detail';
-import AddFile from './pages/result/addFile';
+import AddFile from './pages/result/AddFile';
 import NotFound from './components/404';
 
 function App() {
