@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Swal from "sweetalert2";
 import { storage, firestore } from "../../firebase";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   getDownloadURL,
   uploadBytesResumable,
@@ -145,6 +147,17 @@ function AddFile() {
     await uploadDocToFirebase(uploadedFileUrl);
 
     setUploadIsStarted(false);
+    toast.success('🦄 Wow so easy!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+      });
   };
 
   const uploadFileToStorage = async (file) => {
@@ -222,6 +235,10 @@ function AddFile() {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
+
+    
+
+
   };
 
   return uploadIsStarted ? (
@@ -429,6 +446,21 @@ function AddFile() {
           >
             {id ? "Güncelle" : "Kaydet"}
           </button>
+          <ToastContainer
+                  position="top-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="light"
+                  transition: Bounce
+                  />
+{/* Same as */}
+<ToastContainer />
         </div>
       </form>
 
