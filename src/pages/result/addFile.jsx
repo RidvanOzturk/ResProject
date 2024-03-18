@@ -41,6 +41,7 @@ function AddFile() {
 
   const [title, setTitle] = useState(null);
   const [description, setDescription] = useState(null);
+  const [studentDescription, setStudentDescription] = useState(null);
   const [isSingle, setIsSingle] = useState(true);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -52,6 +53,9 @@ function AddFile() {
     setTitle(e.target.value);
   };
   const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+  const handleStudentDescriptionChange = (e) => {
     setDescription(e.target.value);
   };
   const handleOptionChange = (e) => {
@@ -106,6 +110,7 @@ function AddFile() {
       console.log(response);
       setTitle(response.title);
       setDescription(response.description);
+      setStudentDescription(response.studentDescription);
       setIsSingle(response.isSingle);
       setStartDate(response.startDate.toDate());
       setEndDate(response.endDate.toDate());
@@ -203,6 +208,7 @@ function AddFile() {
         url: uploadedFileUrl,
         title,
         description,
+        studentDescription,
         isSingle,
         startDate,
         endDate,
@@ -248,15 +254,14 @@ function AddFile() {
                   Başlık
                 </label>
                 <div className="mt-2">
-                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                    <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm"></span>
+                  <div className="flex  shadow-sm rounded-lg ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                     <input
                       type="text"
                       name="username"
                       id="username"
                       autoComplete="username"
-                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                      placeholder="Başlık girilmesi zorunludur"
+                      className="block flex-1 border-0 rounded-lg bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                      placeholder="  Başlık girilmesi zorunludur"
                       value={title}
                       onChange={handleTitleChange}
                     />
@@ -275,15 +280,33 @@ function AddFile() {
                     id="description"
                     name="description"
                     rows={3}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     value={description}
                     onChange={handleDescriptionChange}
                     placeholder="  Açıklama giriniz..."
                   />
                 </div>
+              </div>
+              <div className="col-span-full">
+                <label
+                  htmlFor="studentDescription"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Öğrenciye Özel Açıklama
+                </label>
+                <div className="mt-2">
+                  <textarea
+                    id="studentDescription"
+                    name="studentDescription"
+                    rows={3}
+                    className="block w-full rounded-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    value={studentDescription}
+                    onChange={handleStudentDescriptionChange}
+                    placeholder="  Öğrenciye özel bir açıklamanız varsa yazınız."
+                  />
+                </div>
                 <p className="mt-3 text-sm leading-6 text-gray-600"></p>
               </div>
-
               <div className="flex items-center">
                 <input
                   name="single-multiple"
@@ -316,6 +339,7 @@ function AddFile() {
               <div className="col-span-full">
                 <div className="mt-2 flex items-center gap-x-3">
                   <DatePicker
+                  className="rounded-md"
                     showIcon
                     selected={startDate}
                     selectsStart
@@ -326,6 +350,7 @@ function AddFile() {
                     onChange={(date) => handleStartDateChange(date)}
                   />
                   <DatePicker
+                   className="rounded-md"
                     showIcon
                     selected={endDate}
                     selectsEnd
