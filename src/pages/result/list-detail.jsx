@@ -147,7 +147,7 @@ const ListDetail = () => {
           />
       }
       {
-        <div className="w-full text-center p-6 text-lg font-mono">Not: {docData.studentDescription}</div>
+        <div className="w-full text-center p-6 text-lg font-mono">{docData.studentDescription}</div>
       }
       </>
   )

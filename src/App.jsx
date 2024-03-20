@@ -30,6 +30,7 @@ import List from './pages/result/list';
 import ListDetail from './pages/result/list-detail';
 import AddFile from './pages/result/AddFile';
 import NotFound from './components/404';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   
@@ -38,6 +39,7 @@ function App() {
   return (
     <Provider store={store}>
         <PersistGate persistor={persistor}>
+        <ToastContainer autoClose={2500} pauseOnHover={false} hideProgressBar={true} />
           <Router>
               <Header/>
                 <Routes>

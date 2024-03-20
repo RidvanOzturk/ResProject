@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Swal from "sweetalert2";
 import { storage, firestore } from "../../firebase";
-import { ToastContainer, toast } from 'react-toastify';
+import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {
   getDownloadURL,
@@ -30,6 +30,7 @@ import useGenerateTable from "../../hooks/useGenerateTable";
 import ListTable from "../../components/ListTable";
 
 function AddFile() {
+ 
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -83,10 +84,11 @@ function AddFile() {
       });
     }
   };
-
+  
   const {GenerateTable} = useGenerateTable()
 
   useEffect(() => {
+    
     if (!id) {
       setIsLoading(false);
       return;
@@ -146,7 +148,8 @@ function AddFile() {
     await uploadDocToFirebase(uploadedFileUrl);
 
     setUploadIsStarted(false);
-    toast.success('🦄 Wow so easy!', {
+    
+    toast.success('Dosyanız Yüklendi', {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -157,6 +160,8 @@ function AddFile() {
       theme: "light",
       transition: Bounce,
       });
+
+
   };
 
   const uploadFileToStorage = async (file) => {
@@ -445,21 +450,7 @@ function AddFile() {
           >
             {id ? "Güncelle" : "Kaydet"}
           </button>
-          <ToastContainer
-                  position="top-right"
-                  autoClose={5000}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="light"
-                  transition: Bounce
-                  />
-{/* Same as */}
-<ToastContainer />
+
         </div>
       </form>
 
