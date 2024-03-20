@@ -146,6 +146,9 @@ const ListDetail = () => {
             docEndDate={docData.endDate.toDate().toLocaleDateString('en-GB')}
           />
       }
+      {
+        <div className="w-full text-center p-6 text-lg font-mono">Not: {docData.studentDescription}</div>
+      }
       </>
   )
 

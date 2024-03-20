@@ -35,6 +35,7 @@ const ListTable = ({tableData}) => {
             </tbody>
         </table>
     </div>
+    
   )
 }
 

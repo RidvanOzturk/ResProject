@@ -34,7 +34,6 @@ function AddFile() {
   const [isLoading, setIsLoading] = useState(true);
 
   const user = useSelector(({ UserSlice }) => UserSlice.user);
-  const allowedTypes = ["xlsx", "xlsm", "xlsb", "xltx"];
   const [uploadIsStarted, setUploadIsStarted] = useState(false);
 
   const [progress, setProgress] = useState(0);
@@ -58,7 +57,7 @@ function AddFile() {
     setDescription(e.target.value);
   };
   const handleStudentDescriptionChange = (e) => {
-    setDescription(e.target.value);
+    setStudentDescription(e.target.value);
   };
   const handleOptionChange = (e) => {
     setIsSingle(e.target.value === "single" ? true : false);
