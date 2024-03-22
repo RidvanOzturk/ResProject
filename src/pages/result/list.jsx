@@ -4,6 +4,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -35,16 +36,18 @@ function List() {
   
       const querySnapshot = query(
         collection(firestore, "files"),
-        where("owner", "==", user.username),
+        where("owner", "==", user.username)
       );
   
-      const querySnapshotResult = await getDocs(querySnapshot);
+      const querySnapshotResult = await getDocs(querySnapshot)
+
+      const querySnapshotResultSortedDocs = querySnapshotResult.docs.sort((a, b) => b.data().createdAt - a.data().createdAt)
   
-      setAllData(querySnapshotResult.docs);
+      setAllData(querySnapshotResultSortedDocs)
 
-      setActiveData(querySnapshotResult.docs.slice(0, itemsPerPage))
+      setActiveData(querySnapshotResultSortedDocs.slice(0, itemsPerPage))
 
-      setPageCount(Math.ceil(querySnapshotResult.docs.length / itemsPerPage))
+      setPageCount(Math.ceil(querySnapshotResultSortedDocs.length / itemsPerPage))
     };
 
     fetchDocs();

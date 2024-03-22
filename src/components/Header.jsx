@@ -36,7 +36,7 @@ const Header = () => {
     <div className="bg-cyan-500 border-white py-1">
       <nav className="flex justify-between items-center max-w-6xl h-20 mx-auto">
         <div>
-            <img src={logo} width="100" height="100" className="-mb-8" />
+            <img src={logo} draggable="false" width="100" height="100" className="-mb-8" />
         </div>
         {user.username ? (
           <>

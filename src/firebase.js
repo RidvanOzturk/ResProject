@@ -2,13 +2,15 @@ import { initializeApp } from "firebase/app";
 import {getStorage} from "@firebase/storage";
 import {getFirestore} from "@firebase/firestore";
 
+const envKeys = import.meta.env
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCZhw9TOBRmn-alcGA07RIcW3XP-xv5H6U",
-  authDomain: "resapp-aa0c2.firebaseapp.com",
-  projectId: "resapp-aa0c2",
-  storageBucket: "resapp-aa0c2.appspot.com",
-  messagingSenderId: "440487489754",
-  appId: "1:440487489754:web:163fe265ecdf5fc60f35e3"
+  apiKey: envKeys.VITE_APP_FIREBASE_API_KEY,
+  authDomain: envKeys.VITE_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: envKeys.VITE_APP_FIREBASE_PROJECT_ID,
+  storageBucket: envKeys.VITE_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: envKeys.VITE_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: envKeys.VITE_APP_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);

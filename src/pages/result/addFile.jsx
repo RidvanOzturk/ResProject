@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate , useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Swal from "sweetalert2";
 import { storage, firestore } from "../../firebase";
@@ -30,12 +30,15 @@ import useGenerateTable from "../../hooks/useGenerateTable";
 import ListTable from "../../components/ListTable";
 
 function AddFile() {
+
+  const navigate = useNavigate()
  
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
 
   const user = useSelector(({ UserSlice }) => UserSlice.user);
   const [uploadIsStarted, setUploadIsStarted] = useState(false);
+  const [uploadIsFinished, setUploadIsFinished] = useState(false);
 
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
@@ -125,6 +128,7 @@ function AddFile() {
   }, []);
 
   const handleFormSubmit = async () => {
+
     if (title === null || file === null) {
       Swal.fire({
         icon: "error",
@@ -161,6 +165,7 @@ function AddFile() {
       transition: Bounce,
       });
 
+      navigate("/list");
 
   };
 
@@ -240,7 +245,7 @@ function AddFile() {
       console.error("Error adding document: ", e);
     }
 
-    
+    setUploadIsFinished(true)
 
 
   };
