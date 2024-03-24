@@ -20,17 +20,17 @@ const Header = () => {
 
   const welcomeText = () => {
     const myDate = new Date();
-    const hrs = myDate.getHours();
+    const hrs = myDate.getHours()
 
     let message;
 
-    if (hrs < 12) message = "Günaydın";
+    if (hrs > 4 && hrs < 12) message = "Günaydın";
+    else if (hrs >= 0 && hrs <= 4) message = "İyi Geceler";
     else if (hrs >= 12 && hrs <= 17) message = "Tünaydın";
-    else if (hrs >= 17 && hrs <= 22) message = "İyi Akşamlar";
-    else if (hrs >= 22 && hrs <= 5) message = "İyi Geceler";
+    else if (hrs >= 17 && hrs <= 24) message = "İyi Akşamlar";
 
     return message;
-  };
+  }
 
   return (
     <div className="bg-cyan-500 border-white py-1">

@@ -102,7 +102,7 @@ function AddFile() {
       },
       imageUrl: url,
       imageWidth: "100%",
-      imageAlt: "A tall image",
+      imageAlt: "Bilgi Resmi",
       confirmButtonText: "Tamam",
       footer
 
@@ -384,7 +384,7 @@ function AddFile() {
                 <label for="multiple-radio" className="ms-2 text-md">
                   Çoklu
                 </label>
-                <button type="button" onClick={ ()=> handleModal(isSingleModalImg,"<b>Tekli</b> seçiminde tabloda bulunan ilk verinin, <b>Çoklu</b> seçiminde tabloda aynı kişiye ait tüm verilerin gösterileceği alandır.")}><CiCircleQuestion className="text-3xl ml-5"/></button>
+                <button type="button" onClick={ ()=> handleModal(isSingleModalImg,"<b>Tekli</b> seçiminde tabloda kişiye ait bulunan ilk verinin, <b>Çoklu</b> seçiminde tabloda aynı kişiye ait tüm verilerin gösterileceği alandır.")}><CiCircleQuestion className="text-3xl ml-5"/></button>
               </div>
 
               <div className="col-span-full">
