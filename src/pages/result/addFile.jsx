@@ -6,6 +6,12 @@ import Swal from "sweetalert2";
 import { storage, firestore } from "../../firebase";
 import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CiCircleQuestion } from "react-icons/ci";
+import titleModalImg from "../../assets/info-modal/titleModal.jpg"
+import descModalImg from "../../assets/info-modal/descModal.jpg"
+import studentDescModalImg from "../../assets/info-modal/studentDescModal.jpg"
+import isSingleModalImg from "../../assets/info-modal/isSingleModal.jpg"
+import datesModalImg from "../../assets/info-modal/datesModal.jpg"
 import {
   getDownloadURL,
   uploadBytesResumable,
@@ -38,7 +44,6 @@ function AddFile() {
 
   const user = useSelector(({ UserSlice }) => UserSlice.user);
   const [uploadIsStarted, setUploadIsStarted] = useState(false);
-  const [uploadIsFinished, setUploadIsFinished] = useState(false);
 
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
@@ -89,7 +94,20 @@ function AddFile() {
   };
   
   const {GenerateTable} = useGenerateTable()
+  const handleModal =  (url, footer) => {
 
+    Swal.fire({
+      customClass:{
+        popup: "w-full md:w-3/5"
+      },
+      imageUrl: url,
+      imageWidth: "100%",
+      imageAlt: "A tall image",
+      confirmButtonText: "Tamam",
+      footer
+
+    });
+  }
   useEffect(() => {
     
     if (!id) {
@@ -136,6 +154,8 @@ function AddFile() {
         text: "Lütfen tüm boşlukları doldurunuz.",
         footer: "Alanları eksiksiz doldurunuz.",
       });
+
+
 
       return;
     }
@@ -244,10 +264,6 @@ function AddFile() {
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-
-    setUploadIsFinished(true)
-
-
   };
 
   return uploadIsStarted ? (
@@ -279,8 +295,8 @@ function AddFile() {
                 >
                   Başlık
                 </label>
-                <div className="mt-2">
-                  <div className="flex  shadow-sm rounded-lg ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+                <div className="mt-2 flex items-center gap-x-2">
+                  <div className="flex w-full shadow-sm rounded-lg ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                     <input
                       type="text"
                       name="username"
@@ -292,7 +308,12 @@ function AddFile() {
                       onChange={handleTitleChange}
                     />
                   </div>
+                  <button type="button" onClick={ ()=> handleModal(titleModalImg, "Başlık bölümünün görüntüleneceği alandır.")}><CiCircleQuestion className="text-3xl"/></button>
                 </div>
+                <div>
+                  
+                </div>
+               
               </div>
               <div className="col-span-full">
                 <label
@@ -301,28 +322,30 @@ function AddFile() {
                 >
                   Açıklama
                 </label>
-                <div className="mt-2">
+                <div className="mt-2 flex items-center gap-x-3">
                   <textarea
-                    id="description"
+                    id={2}
                     name="description"
                     rows={3}
-                    className="block w-full rounded-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="flex w-full rounded-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     value={description}
                     onChange={handleDescriptionChange}
                     placeholder="  Açıklama giriniz..."
                   />
+                  <button type="button" onClick={ ()=> handleModal(descModalImg, "Açıklama bölümünün görüntüleneceği alandır.")}><CiCircleQuestion className="text-3xl"/></button>
                 </div>
+                
               </div>
               <div className="col-span-full">
                 <label
                   htmlFor="studentDescription"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                  Öğrenciye Özel Açıklama
+                  Öğrencilere Özel Açıklama
                 </label>
-                <div className="mt-2">
+                <div className="mt-2 flex items-center gap-x-3">
                   <textarea
-                    id="studentDescription"
+                    id={3}
                     name="studentDescription"
                     rows={3}
                     className="block w-full rounded-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -330,6 +353,7 @@ function AddFile() {
                     onChange={handleStudentDescriptionChange}
                     placeholder="  Öğrenciye özel bir açıklamanız varsa yazınız."
                   />
+                  <button type="button" onClick={ ()=> handleModal(studentDescModalImg,"Öğrencilere, sonuç sayfasında not bırakabileceğiniz alandır.")}><CiCircleQuestion className="text-3xl"/></button>
                 </div>
                 <p className="mt-3 text-sm leading-6 text-gray-600"></p>
               </div>
@@ -347,7 +371,7 @@ function AddFile() {
                   Tekli
                 </label>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center ">
                 <input
                   name="single-multiple"
                   type="radio"
@@ -360,13 +384,14 @@ function AddFile() {
                 <label for="multiple-radio" className="ms-2 text-md">
                   Çoklu
                 </label>
+                <button type="button" onClick={ ()=> handleModal(isSingleModalImg,"<b>Tekli</b> seçiminde tabloda bulunan ilk verinin, <b>Çoklu</b> seçiminde tabloda aynı kişiye ait tüm verilerin gösterileceği alandır.")}><CiCircleQuestion className="text-3xl ml-5"/></button>
               </div>
 
               <div className="col-span-full">
                 <div className="mt-2 flex items-center gap-x-3">
                   <DatePicker
-                  className="rounded-md"
-                    showIcon
+                    className="rounded-md !pl-8 !py-3.5"
+                    showIcon 
                     selected={startDate}
                     selectsStart
                     startDate={startDate}
@@ -376,7 +401,7 @@ function AddFile() {
                     onChange={(date) => handleStartDateChange(date)}
                   />
                   <DatePicker
-                   className="rounded-md"
+                    className="rounded-md !pl-8 !py-3.5"
                     showIcon
                     selected={endDate}
                     selectsEnd
@@ -386,7 +411,9 @@ function AddFile() {
                     dateFormat="dd/MM/yyyy"
                     onChange={(date) => handleEndDateChange(date)}
                   />
+                   <button type="button" onClick={ ()=> handleModal(datesModalImg,"Öğrencilere, sonuçlarını hangi tarih aralığında görüntüleyebileceklerini gösterdiğiniz alandır.")}><CiCircleQuestion className="text-3xl"/></button>
                 </div>
+                
               </div>
 
               <div className="col-span-full">
@@ -441,6 +468,7 @@ function AddFile() {
                       onChange={handleFileChange}
                     />
                   </label>
+                  <button type="button" onClick={handleModal}><CiCircleQuestion className="text-3xl ml-5"/></button>
                 </div>
               </div>
             </div>

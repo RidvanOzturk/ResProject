@@ -80,15 +80,16 @@ const ListDetail = () => {
         setIsDocAccessible(true)
 
         let xlsTable = await GenerateTable(docData.url)
+        console.log(xlsTable);
 
-        let filteredData;
+        let filteredData = null;
         if(user.role == RoleTypes.admin){
           filteredData = xlsTable
         }
         else if (user.role == RoleTypes.user) {
           filteredData = xlsTable.filter((number) => number["Öğrenci No"] == user.username);
 
-          if (docData.isSingle) {
+          if (filteredData.length && docData.isSingle) {
             filteredData = [filteredData[0]];
           }
         }
