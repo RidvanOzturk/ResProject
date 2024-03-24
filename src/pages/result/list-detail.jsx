@@ -148,7 +148,7 @@ const ListDetail = () => {
           />
       }
       {
-        <div className="w-full text-center p-6 text-lg font-mono">{docData.studentDescription}</div>
+        <div className="w-full text-center p-6 text-lg font-mono mt-10">{docData.studentDescription}</div>
       }
       </>
   )

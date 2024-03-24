@@ -7,6 +7,7 @@ import { storage, firestore } from "../../firebase";
 import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { CiCircleQuestion } from "react-icons/ci";
+import { FaArrowCircleDown } from "react-icons/fa";
 import titleModalImg from "../../assets/info-modal/titleModal.jpg"
 import descModalImg from "../../assets/info-modal/descModal.jpg"
 import studentDescModalImg from "../../assets/info-modal/studentDescModal.jpg"
@@ -58,6 +59,9 @@ function AddFile() {
   const [file, setFile] = useState(null);
   
   const [table, setTable] = useState(null)
+
+
+  const [isScrollArrowEnable, setIsScrollArrowEnable] = useState(false)
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -115,6 +119,8 @@ function AddFile() {
       return;
     }
 
+    setIsScrollArrowEnable(true)
+
     const fetchDocById = async () => {
       if (!user.username) return null;
 
@@ -143,6 +149,22 @@ function AddFile() {
       setTable(await GenerateTable(response.url))
       setIsLoading(false);
     });
+
+    const handleScroll = () => {
+      let scrollTop = window.scrollY;
+      // Calculate the total scrollable height
+      let windowHeight = window.innerHeight;
+      let fullHeight = document.body.offsetHeight;
+    
+      // Check if the scroll is within a certain range from the bottom
+      if (scrollTop + windowHeight >= fullHeight) {
+        setIsScrollArrowEnable(false)
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleFormSubmit = async () => {
@@ -266,6 +288,15 @@ function AddFile() {
     }
   };
 
+  const goToBottom = (e) => {
+    console.log(e.target)
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth",
+    })
+    setIsScrollArrowEnable(false)
+};
+
   return uploadIsStarted ? (
     <div className="py-10">
       <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl text-center">
@@ -284,6 +315,12 @@ function AddFile() {
     </div>
   ) : (
     <div>
+      {
+        isScrollArrowEnable &&
+        <button type="button" onClick={goToBottom}>
+          <FaArrowCircleDown className="fixed bottom-6 right-12 text-4xl animate-bounce"/>
+        </button>
+      }
       <form>
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
