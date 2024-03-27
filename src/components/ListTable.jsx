@@ -1,9 +1,7 @@
 
 const ListTable = ({tableData}) => {
-    console.log(tableData);
-    console.log(tableData.Ad);
     return (
-    <div className="relative overflow-x-auto pt-6">
+    <div className="relative overflow-x-auto pt-5">
         <table className="w-full text-sm mt-7 text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>

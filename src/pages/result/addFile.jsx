@@ -525,6 +525,7 @@ function AddFile() {
       </form>
 
       <div>
+        <p className="text-center text-lg font-bold">{id && file && table && "Yüklenen Excel Verileriniz"}</p>
         {id && file && table && <ListTable tableData={table}></ListTable>}
       </div>
     </div>
