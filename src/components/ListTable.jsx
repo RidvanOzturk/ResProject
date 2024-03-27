@@ -1,19 +1,22 @@
 
 const ListTable = ({tableData}) => {
-  return (
+    console.log(tableData);
+    console.log(tableData.Ad);
+    return (
     <div className="relative overflow-x-auto pt-6">
         <table className="w-full text-sm mt-7 text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" className="px-6 py-3">
-                Ad
+               
+                {Object.keys(tableData[0]).map((title,key)=>
+                <th scope="col" key={key} className="px-6 py-3">
+                    {title}
                 </th>
-                <th scope="col" className="px-6 py-3">
-                Soyad
-                </th>
-                <th scope="col" className="px-6 py-3">
-                Sonuç
-                </th>
+
+                )
+                
+                
+                }
             </tr>
             </thead>
             <tbody>
@@ -26,10 +29,11 @@ const ListTable = ({tableData}) => {
                     scope="row"
                     className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                    {row["Ad"]}
+                    {row[Object.keys(row)[0]]}
                 </th>
-                <td className="px-6 py-4">{row["Soyad"]}</td>
-                <td className="px-6 py-4">{row["Sonuç"]}</td>
+                <td className="px-6 py-4">{row[Object.keys(row)[1]]}</td>
+                <td className="px-6 py-4">{row[Object.keys(row)[2]]}</td>
+                <td className="px-6 py-4">{row[Object.keys(row)[3]]}</td>
                 </tr>
             ))}
             </tbody>

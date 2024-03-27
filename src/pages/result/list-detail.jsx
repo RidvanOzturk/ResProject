@@ -135,6 +135,9 @@ const ListDetail = () => {
         isTableLoading && <LoadingSpinner isTransparent={user.role != RoleTypes.admin}/>
       }
       {
+        <div className="w-full text-center p-6 text-lg font-mono mt-10">{docData.studentDescription}</div>
+      }
+      {
         user.username && tableData && tableData.length ?
           <ListTable tableData={tableData} />
         : 
@@ -147,9 +150,7 @@ const ListDetail = () => {
             docEndDate={docData.endDate.toDate().toLocaleDateString('en-GB')}
           />
       }
-      {
-        <div className="w-full text-center p-6 text-lg font-mono mt-10">{docData.studentDescription}</div>
-      }
+      
       </>
   )
 
