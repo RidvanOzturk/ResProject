@@ -16,6 +16,7 @@ import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { RoleTypes } from "../../RoleTypes";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { CiCircleQuestion } from "react-icons/ci";
 function List() {
 
   const itemsPerPage = 5
@@ -110,7 +111,20 @@ function List() {
       color: "gray",
       onClick: () => setActivePage(index),
   });
- 
+  const handleModal =  (url, footer) => {
+
+    Swal.fire({
+      customClass:{
+        popup: "w-full md:w-3/5"
+      },
+      imageUrl: url,
+      imageWidth: "100%",
+      imageAlt: "Bilgi Resmi",
+      confirmButtonText: "Tamam",
+      footer
+
+    });
+  }
   const handleNext = () => {
     if (activePage === pageCount) return;
  
@@ -124,18 +138,18 @@ function List() {
   };
   return (
     <>
-      <h1 className="text-center text-2xl font-bold">List Page</h1>
       <br />
-      <Card className="max-w">
+      <Card className="max-w flex">
         <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          <h3 className="text-center text-2xl font-bold">Yüklenen Dosyalar</h3>
+          <h3 className="text-center text-2xl font-bold flex items-center justify-center">Yüklenen Dosyalar</h3>
+          <button type="button" onClick={ ()=> handleModal(titleModalImg, "Bu sayfada yüklediğiniz dosyaları düzenleyip silebilir, dosyayın URL'sini kopyalayıp öğrencilerinizle paylaşabilirsiniz.")}><CiCircleQuestion className="text-3xl"/></button>
         </h5>
         <div className="mt-4">
           {activeData &&
             activeData.map((value,key) => (
               <div key={key} className="grid grid-cols-5 gap-x-2 pt-5 items-center hover:border hover:rounded-xl hover:shadow-lg">
                 <Link className="col-span-2 text-lg font-semibold text-center underline" to={value.id}>{value.data().title}</Link>
-                <button className="focus:outline-none text-white bg-cyan-400 hover:bg-cyan-700 focus:ring-4 focus:ring-green-300 font-medium rounded-xl text-sm px-5 py-2.5" onClick={() => handleCopy(window.location.href + "/" + value.id) } type="button">
+                <button className="focus:outline-none text-white bg-cyan-500 hover:bg-cyan-700 focus:ring-4 focus:ring-green-300 font-medium rounded-xl text-sm px-5 py-2.5" onClick={() => handleCopy(window.location.href + "/" + value.id) } type="button">
                   Kopyala
                 </button>
                 <Link className="flex justify-center items-center focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5" to={`/addFile/${value.id}`}>

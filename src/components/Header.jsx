@@ -33,7 +33,7 @@ const Header = () => {
   }
 
   return (
-    <div className="bg-cyan-500 border-white py-1">
+    <div className="bg-[#25bdba] border-white py-1">
       <nav className="flex justify-between items-center max-w-6xl h-20 mx-auto">
         <div>
             <img src={logo} draggable="false" width="100" height="100" className="-mb-8" />
