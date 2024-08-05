@@ -1,8 +1,11 @@
-# React + Vite
+# ResProject-ReactJS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Using Firebase Firestore, a React project was developed where instructor 
+or authorized person can upload and view Excel files containing students' exam
+results. Professors can edit, delete and share the uploaded files with
+students. They can also add student-specific notes and filter the files
+on specific date ranges. It provides an interface that will allow
+professors to easily manage exam results
 
-Currently, two official plugins are available:
+https://github.com/user-attachments/assets/1405fe22-43de-4ab1-a459-9826d5f51edd
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
