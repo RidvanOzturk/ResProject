@@ -7,5 +7,6 @@ students. They can also add student-specific notes and filter the files
 on specific date ranges. It provides an interface that will allow
 professors to easily manage exam results
 
-https://github.com/user-attachments/assets/1405fe22-43de-4ab1-a459-9826d5f51edd
+https://github.com/user-attachments/assets/527630a3-3dff-4247-9a97-07e272b7801d
+
 
